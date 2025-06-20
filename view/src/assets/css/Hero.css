@@ -1,0 +1,49 @@
+.hero{
+
+    display: flex;
+    /* border: 1px solid red; */
+    height: 30vh;
+    width: 100vw;
+
+
+}
+
+.hero_info{
+    display: flex;
+    justify-content: center;
+    width: 18.5%;
+    height: 100%;
+    /* border: 1px solid blue; */
+    font-size: smaller;
+    align-items: center;
+   
+
+
+}
+
+.hero_info p{
+
+    font-weight: 400;
+    text-align: start;
+    width: 70%;
+
+
+
+}
+.hero_title{
+
+
+    padding-left: 4rem;
+    display: flex;
+    align-items: center;
+    font-weight: 100;
+}
+
+.hero_title h3 {
+    font-size: 45px;
+    font-weight: 400;
+    color: #3a2926;
+    text-align: start;
+    
+    
+}

@@ -1,0 +1,57 @@
+/* ProductGrid.css */
+.product-grid {
+    padding: 32px 32px 0 32px;
+}
+
+.product-grid__title h1 {
+    font-size: 36px;
+    font-weight: 500;
+    color: #3a2926;
+    margin-bottom: 32px;
+}
+
+.product-grid__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.product-grid__item {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px #0001;
+    padding: 18px;
+    text-align: center;
+}
+
+.product-grid__img img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.product-grid__cat {
+    font-size: 11px;
+    color: #a89b8a;
+    margin-bottom: 2px;
+}
+
+.product-grid__name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #3a2926;
+    margin-bottom: 2px;
+}
+
+.product-grid__price {
+    font-size: 15px;
+    color: #3a2926;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .product-grid {
+        display: none;
+    }
+}

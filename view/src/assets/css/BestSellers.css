@@ -1,0 +1,9 @@
+/* BestSellers.css */
+.bestsellers { background: #fff; border-radius: 8px; box-shadow: 0 1px 6px #0001; padding: 18px; margin: 24px 0; }
+.bestsellers h3 { font-size: 18px; color: #3a2926; margin-bottom: 18px; }
+.bestsellers__card { display: flex; align-items: center; }
+.bestsellers__img img { width: 60px; height: 60px; object-fit: contain; margin-right: 16px; }
+.bestsellers__info span { font-size: 11px; color: #e5a97a; }
+.bestsellers__info h4 { font-size: 15px; color: #3a2926; margin: 2px 0; }
+.bestsellers__rating { font-size: 13px; color: #e5a97a; }
+.bestsellers__price { font-size: 15px; color: #3a2926; font-weight: 600; }

@@ -1,0 +1,32 @@
+/* HomePage.css */
+.homepage {
+    min-height: 100vh;
+    background: rgb(245, 242, 239, 0.5);
+}
+
+.homepage__desktop {
+    display: flex;
+    flex-direction: column;
+}
+
+.homepage__main {
+    display: flex;
+}
+
+.homepage__content {
+    flex: 1;
+}
+
+.homepage__mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .homepage__desktop {
+        display: none;
+    }
+
+    .homepage__mobile {
+        display: block;
+    }
+}

@@ -1,0 +1,109 @@
+/* Sidebar.css */
+.sidebar {
+    width: 17vw;
+    background: #faf9f7;
+    /* padding: 24px 12px; */
+    border-right: 2px solid #e5e5e5;
+    /* border: 2px solid red; */
+    padding-left: 20px;
+    letter-spacing: 1px;
+    
+
+}
+.sidebar__filter-header{
+    /* border: 1px solid red; */
+    height: 6vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10px;
+    border-bottom: 2px solid #e5e5e5;
+
+
+}
+.sidebar__filter-header img{
+
+    width: 25px;
+    height: 25px;
+}
+
+.sidebar__filters h4 {
+    font-size: 20px;
+    font-weight: 400;
+    /* margin-bottom: 18px; */
+}
+
+.filter-options{
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: start;
+    margin-top: 3vh;
+    padding-right: 10px;
+
+}
+.sidebar__filter-group{
+
+    display: flex;
+    border-bottom: 2px solid #e5e5e5;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 6vh;
+    cursor: pointer;
+    
+
+
+}
+
+.sidebar__filter-group h4 {
+    font-size: 17px;
+    /* margin-bottom: 10px; */
+    color: #3a2926;
+    font-weight: 400;
+}
+.sidebar__filter-group img{
+
+    width: 18px;
+    height: 18px;
+    opacity: 0.5;
+}
+
+.sidebar__clear {
+    background: rgb(239, 119, 27, 0.8);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 97%;
+    margin-top: 20px;
+    margin-right: 20px;
+
+}
+
+.sidebar__products {
+    margin-top: 30px;
+}
+
+.sidebar__product-card {
+    background: #fff;
+    margin-bottom: 14px;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px #0001;
+    font-size: 13px;
+}
+
+.sidebar__product-card span {
+    display: block;
+    color: #e5a97a;
+    font-size: 11px;
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        display: none;
+    }
+}

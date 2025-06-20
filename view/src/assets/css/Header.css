@@ -1,0 +1,50 @@
+/* Header.css */
+.header {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.header__topbar {
+    background: #3a2926;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    padding: 4px 0;
+}
+
+.header__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+}
+
+.header__logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.header__nav a {
+    margin: 0 14px;
+    color: #3a2926;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.header__actions a {
+    margin-left: 18px;
+    color: #3a2926;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+@media (max-width: 900px) {
+
+    .header,
+    .header__main {
+        display: none;
+    }
+}
