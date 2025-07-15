@@ -32,10 +32,12 @@ export default function ProductGrid() {
               alt={product.node.images.edges[0]?.node.altText || product.node.title}
             />
           </div>
+             <div className="product-grid__name_price">
           <div className="product-grid__name">{product.node.title}</div>
           <div className="product-grid__price">
             ₹{product.node.variants.edges[0].node.price.amount}
           </div>
+             </div>
           <button
             className="product-grid__buyNowBtn"
             onClick={() => cartHandler(product.node.variants.edges[0].node.id)}
