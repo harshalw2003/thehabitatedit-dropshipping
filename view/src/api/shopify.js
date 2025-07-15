@@ -1,5 +1,5 @@
 
-export default async function fetchProducts() {
+export async function fetchProducts() {
   const endpoint = `http://34.44.209.117:8001/shopify/products/`;
 
   const res = await fetch(endpoint, {
