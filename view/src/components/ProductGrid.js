@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../assets/css/Products.css"; // Make sure this path is correct based on your folder structure
+import "../assets/css/ProductGrid.css"; // Make sure this path is correct based on your folder structure
 import { fetchProducts, createCart } from "../api/shopify";
 
 
