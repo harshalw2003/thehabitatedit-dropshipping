@@ -18,30 +18,30 @@ export default function Products() {
       window.location.href = checkoutUrl;
     });
   };
-  return (
-    <div className="grid grid-cols-3 gap-4 p-4">
-      {productsArray.map((product) => (
+  // return (
+  //   <div className="grid grid-cols-3 gap-4 p-4">
+  //     {productsArray.map((product) => (
 
-        <div key={product.node.id} className="border p-2 rounded-lg">
-          {/* <h3 className="text-lg font-bold">{product.node.title}</h3>
-           <img
-             src={product.node.images.edges[0]?.node.url}
-             alt={product.node.images.edges[0]?.node.altText || product.node.title}
-             className="w-full h-48 object-cover rounded"
-           />
+  //       <div key={product.node.id} className="border p-2 rounded-lg">
+  //         {/* <h3 className="text-lg font-bold">{product.node.title}</h3>
+  //          <img
+  //            src={product.node.images.edges[0]?.node.url}
+  //            alt={product.node.images.edges[0]?.node.altText || product.node.title}
+  //            className="w-full h-48 object-cover rounded"
+  //          />
         
-           <p className="text-sm text-gray-600">{product.description}</p>
-           <p className="text-green-600 font-semibold">
-             ₹{product.node.variants.edges[0]?.node.price.amount}
-           </p> */}
+  //          <p className="text-sm text-gray-600">{product.description}</p>
+  //          <p className="text-green-600 font-semibold">
+  //            ₹{product.node.variants.edges[0]?.node.price.amount}
+  //          </p> */}
 
 
-          <img src={product.node.images.edges[0]?.node.url} alt={product.node.images.edges[0]?.node.altText || product.node.title} />
-          <h3>{product.node.title}</h3>
-          <p>₹{product.node.variants.edges[0].node.price.amount}</p>
-          <button onClick={() => cartHandler(product.node.variants.edges[0].node.id)}>Buy Now</button>
-        </div>
-      ))}
-    </div>
-  );
+  //         <img src={product.node.images.edges[0]?.node.url} alt={product.node.images.edges[0]?.node.altText || product.node.title} />
+  //         <h3>{product.node.title}</h3>
+  //         <p>₹{product.node.variants.edges[0].node.price.amount}</p>
+  //         <button onClick={() => cartHandler(product.node.variants.edges[0].node.id)}>Buy Now</button>
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 }
