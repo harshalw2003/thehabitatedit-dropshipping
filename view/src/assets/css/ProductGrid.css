@@ -50,6 +50,16 @@
     font-weight: 600;
 }
 
+.product-grid__buyNowBtn{
+
+    padding: 0.5rem 1rem ;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 7px;
+
+}
+
 @media (max-width: 900px) {
     .product-grid {
         display: none;
