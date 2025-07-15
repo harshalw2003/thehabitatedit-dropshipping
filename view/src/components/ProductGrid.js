@@ -3,7 +3,7 @@ import "../assets/css/ProductGrid.css"; // Make sure this path is correct based 
 import { fetchProducts, createCart } from "../api/shopify";
 
 
-export default function Products() {
+export default function ProductGrid() {
   const [products, setProducts] = useState([]);
 
   // console.log(products)
@@ -19,29 +19,33 @@ export default function Products() {
     });
   };
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
+  <section className="product-grid">
+    <div className="product-grid__title">
+      <h1>Products</h1>
+    </div>
+    <div className="product-grid__list">
       {productsArray.map((product) => (
-
-        <div key={product.node.id} className="border p-2 rounded-lg">
-          {/* <h3 className="text-lg font-bold">{product.node.title}</h3>
-           <img
-             src={product.node.images.edges[0]?.node.url}
-             alt={product.node.images.edges[0]?.node.altText || product.node.title}
-             className="w-full h-48 object-cover rounded"
-           />
-        
-           <p className="text-sm text-gray-600">{product.description}</p>
-           <p className="text-green-600 font-semibold">
-             ₹{product.node.variants.edges[0]?.node.price.amount}
-           </p> */}
-
-
-          <img src={product.node.images.edges[0]?.node.url} alt={product.node.images.edges[0]?.node.altText || product.node.title} />
-          <h3>{product.node.title}</h3>
-          <p>₹{product.node.variants.edges[0].node.price.amount}</p>
-          <button onClick={() => cartHandler(product.node.variants.edges[0].node.id)}>Buy Now</button>
+        <div className="product-grid__item" key={product.node.id}>
+          <div className="product-grid__img">
+            <img
+              src={product.node.images.edges[0]?.node.url}
+              alt={product.node.images.edges[0]?.node.altText || product.node.title}
+            />
+          </div>
+          <div className="product-grid__name">{product.node.title}</div>
+          <div className="product-grid__price">
+            ₹{product.node.variants.edges[0].node.price.amount}
+          </div>
+          <button
+            className="product-grid__buyNowBtn"
+            onClick={() => cartHandler(product.node.variants.edges[0].node.id)}
+          >
+            Buy Now
+          </button>
         </div>
       ))}
     </div>
-  );
+  </section>
+);
+
 }
