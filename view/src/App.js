@@ -6,7 +6,7 @@ import Products from './components/Products.jsx';
 function App() {
   return (
     <div className="App">
-      <Products />
+     <HomePage/>
     </div>
   );
 }
