@@ -1,0 +1,29 @@
+.sort-by {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 13px;
+  color: #3a2926;
+  margin-bottom: 18px;
+  width: 100%;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 8px;  
+  margin-top: 0.9rem;
+}
+
+.sort-by__label {
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.sort-by__select {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: #3a2926;
+  font-weight: 500;
+  padding: 2px 0 2px 8px;
+  outline: none;
+  cursor: pointer;
+}

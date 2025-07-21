@@ -1,18 +1,28 @@
 
 export async function fetchProducts() {
-  const endpoint = `http://34.44.209.117:8001/shopify/products/`;
+  const endpoint = `http://localhost:8001/shopify/products/`;
 
-  const res = await fetch(endpoint, {
+ try{
+
+   const res = await fetch(endpoint, {
     method: "POST",
   });
 
   const data = await res.json();
   console.log("Data from Api Call",data)
-  return data;
+  if(data){
+    return data;
+  }else{
+    return false;
+  }
+
+ }catch(err){
+  console.log(err.message);
+ }
 };
 
 export async function createCart(merchandiseId, quantity = 1) {
-  const res = await fetch("http://34.44.209.117:8001/shopify/create-cart", {
+  const res = await fetch("http://localhost:8001/shopify/create-cart", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

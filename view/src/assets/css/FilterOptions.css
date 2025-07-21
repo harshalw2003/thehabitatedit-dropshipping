@@ -1,0 +1,80 @@
+/* Additional styles for sample options in filter groups */
+
+/* Container for filter options */
+.filter-group__options {
+  width: 100%;
+  padding:  0;
+  margin: 0 0 10px 0;
+}
+
+/* Each individual filter option */
+.filter-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #ece7e3;
+}
+
+.filter-option:nth-last-child {
+  
+  border-bottom: none;
+}
+
+/* Checkbox styling */
+.filter-option__checkbox {
+  margin-right: 12px;
+  accent-color: #3a2926;
+}
+
+/* Option label */
+.filter-option__label {
+  font-size: 14px;
+  color: #3a2926;
+}
+
+/* Count of items in each filter category */
+.filter-option__count {
+  margin-left: auto;
+  font-size: 12px;
+  color: #a89b8a;
+}
+
+/* Style for when a filter is active/selected */
+.filter-option--active {
+  font-weight: 500;
+}
+
+/* Price range slider container */
+.price-range {
+  width: 100%;
+  padding: 10px 0;
+}
+
+/* Custom sliders for price range */
+.price-range__slider {
+  width: 100%;
+  margin: 8px 0;
+  accent-color: #e5a97a;
+}
+
+/* Color filter options */
+.color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.color-option--selected {
+  outline: 2px solid #3a2926;
+  outline-offset: 2px;
+}

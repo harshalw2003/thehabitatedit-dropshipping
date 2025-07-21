@@ -6,8 +6,14 @@ const Sidebar = () => (
   <aside className="sidebar">
     <div className="sidebar__filters">
       <div className="sidebar__filter-header">
-        <h4>FILTERS</h4>
+        <div>
+          <h4>FILTERS</h4>
         <img src={require("../assets/images/filter-icon.png")} />
+        </div>
+       <div>
+        <h4>SORT BY</h4>
+        <img src={require("../assets/images/dropdown.png")} />
+       </div>
       </div>
       <div className="filter-options">
         <div className="sidebar__filter-group">

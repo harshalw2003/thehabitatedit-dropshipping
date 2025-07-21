@@ -1,8 +1,46 @@
 /* Banner.css */
-.banner { display: flex; align-items: center; background: #f5f2ef; border-radius: 10px; margin: 32px; padding: 32px; }
-.banner__content { flex: 1; }
-.banner__content span { font-size: 20px; font-weight: 600; color: #3a2926; }
-.banner__content p { font-size: 15px; color: #3a2926; margin: 10px 0; }
-.banner__content button { background: #3a2926; color: #fff; border: none; padding: 10px 28px; border-radius: 2px; font-size: 15px; cursor: pointer; }
-.banner__img img { width: 180px; height: auto; }
-@media (max-width: 900px) { .banner { display: none; } }
+.banner {
+    display: flex;
+    align-items: center;
+    background: #f5f2ef;
+    border-radius: 10px;
+    margin: 32px;
+    padding: 32px;
+}
+
+.banner__content {
+    flex: 1;
+}
+
+.banner__content span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #3a2926;
+}
+
+.banner__content p {
+    font-size: 15px;
+    color: #3a2926;
+    margin: 10px 0;
+}
+
+.banner__content button {
+    background: #3a2926;
+    color: #fff;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 2px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.banner__img img {
+    width: 180px;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .banner {
+        display: none;
+    }
+}

@@ -2,12 +2,16 @@
 import React from 'react';
 import Header from './Header';
 import Hero from './hero';
-import Sidebar from './Sidebar';
+// import Sidebar from './Sidebar';
 import ProductGrid from './ProductGrid';
 import Banner from './Banner';
 import BestSellers from './BestSellers';
 import MobileMenu from './MobileMenu';
 import '../assets/css/HomePage.css';
+import SortBy from './SortBy';
+import FilterSidebar from './FilterSidebar';
+
+
 
 const HomePage = () => (
   <div className="homepage">
@@ -15,8 +19,9 @@ const HomePage = () => (
       <Header />
       <Hero/>
       <div className="homepage__main">
-        <Sidebar />
+      <FilterSidebar />
         <div className="homepage__content">
+          <SortBy />
           <ProductGrid />
           <Banner />
         </div>
@@ -26,7 +31,8 @@ const HomePage = () => (
       <MobileMenu />
       <BestSellers />
     </div>
-  </div>
+    
+  </div> 
 );
 
 export default HomePage;
