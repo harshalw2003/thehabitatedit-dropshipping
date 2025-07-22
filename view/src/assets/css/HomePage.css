@@ -21,12 +21,10 @@
     display: none;
 }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
     .homepage__desktop {
         display: none;
     }
 
-    .homepage__mobile {
-        display: block;
-    }
-}
+    
+} */

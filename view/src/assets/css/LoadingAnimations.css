@@ -1,0 +1,136 @@
+/* Loading spinner styles for ProductGrid */
+
+.product-grid__loading {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 50px;
+  width: 100%;
+  /* padding: 40px 0; */
+  /* border: 1px solid red; */
+
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spinner-circle {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(229, 169, 122, 0.2);
+  border-top: 3px solid #e5a97a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.spinner-text {
+  color: #3a2926;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* For no products found state */
+.product-grid__empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8a7e77;
+  font-size: 18px;
+}
+
+/* Add a fade-in animation for products */
+.product-grid__list {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Add a staggered animation for individual product items */
+.product-grid__item {
+  animation: fadeInItem 0.4s ease-out backwards;
+}
+
+@keyframes fadeInItem {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply staggered delay to items */
+.product-grid__link:nth-child(1) .product-grid__item { animation-delay: 0.1s; }
+.product-grid__link:nth-child(2) .product-grid__item { animation-delay: 0.15s; }
+.product-grid__link:nth-child(3) .product-grid__item { animation-delay: 0.2s; }
+.product-grid__link:nth-child(4) .product-grid__item { animation-delay: 0.25s; }
+.product-grid__link:nth-child(5) .product-grid__item { animation-delay: 0.3s; }
+.product-grid__link:nth-child(6) .product-grid__item { animation-delay: 0.35s; }
+.product-grid__link:nth-child(7) .product-grid__item { animation-delay: 0.4s; }
+.product-grid__link:nth-child(8) .product-grid__item { animation-delay: 0.45s; }
+.product-grid__link:nth-child(9) .product-grid__item { animation-delay: 0.5s; }
+.product-grid__link:nth-child(10) .product-grid__item { animation-delay: 0.55s; }
+
+/* Shimmer loading effect for placeholders */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(to right, #f5f2ef 4%, #e5e1dc 25%, #f5f2ef 36%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: 4px;
+}
+
+/* Placeholder styles for products while loading */
+.product-placeholder {
+  height: 240px;
+  margin-bottom: 16px;
+}
+
+.product-placeholder-text {
+  height: 14px;
+  margin-bottom: 8px;
+  width: 80%;
+}
+
+/* Bounce animation for attention */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+  40% {transform: translateY(-8px);}
+  60% {transform: translateY(-4px);}
+}
+
+.bounce {
+  animation: bounce 2s ease infinite;
+}
+
+/* Grow animation for hover effect */
+@keyframes grow {
+  from {transform: scale(1);}
+  to {transform: scale(1.05);}
+}
+
+.grow:hover {
+  animation: grow 0.2s ease-out forwards;
+}

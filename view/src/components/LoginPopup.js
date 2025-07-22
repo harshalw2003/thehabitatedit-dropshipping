@@ -45,7 +45,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
       <div className="login-popup">
         <button className="login-popup__close" onClick={onClose}>×</button>
         <div className="login-popup__header">
-          <h2>Login to MOSS</h2>
+          <h2>Login to TH EDIT</h2>
           <p>Enter your details to access your account</p>
         </div>
 
