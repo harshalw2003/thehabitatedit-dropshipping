@@ -1,6 +1,6 @@
 
 export async function fetchProducts() {
-  const endpoint = `http://localhost:8001/shopify/products/`;
+  const endpoint = `http://192.168.43.146:8001/shopify/products/`;
 
  try{
 
@@ -22,7 +22,7 @@ export async function fetchProducts() {
 };
 
 export async function createCart(merchandiseId, quantity = 1) {
-  const res = await fetch("http://localhost:8001/shopify/create-cart", {
+  const res = await fetch("http://192.168.43.146:8001/shopify/create-cart", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

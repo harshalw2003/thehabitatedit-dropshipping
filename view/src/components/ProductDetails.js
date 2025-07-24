@@ -24,7 +24,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true); // Set loading to true when fetching starts
-        const response = await fetch(`http://localhost:8001/shopify/product/${id}`, {
+        const response = await fetch(`http://192.168.43.146:8001/shopify/product/${id}`, {
           method: 'POST',
         });
 

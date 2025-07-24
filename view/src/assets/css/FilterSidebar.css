@@ -1,30 +1,26 @@
 /* Sidebar.css */
+/* Desktop Filter Sidebar */
 .filter-sidebar {
     width: 17vw;
     background: #faf9f7;
     border-right: 2px solid #e5e5e5;
-    padding-left:20px;
+    padding-left: 20px;
     letter-spacing: 1px;
-    
-
 }
+
 .sidebar__filter-header{
-    
     height: 6vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-right: 10px;
     border-bottom: 2px solid #e5e5e5;
-    /* border-right: 2px solid rgb(245, 242, 239, 0.5); */
-    /* border: 1px solid red; */
-
-
 }
-.sidebar__filter-header img{
 
+.desktop-filter-icon {
     width: 25px;
     height: 25px;
+    display: block; /* Ensure it displays in desktop view */
 }
 
 .sidebar__filters h4 {
@@ -38,63 +34,54 @@
     align-items: start;
     width: 100%;
 }
+
 .sidebar__filter-group{
     display: flex;
     border-bottom: 1px solid #e5e5e5;
     justify-content: space-between;
     flex-direction: column;
-    width: 94%;
+    width: 93%;
     height: fit-content;
     cursor: pointer;
     color: #3a2926;
     padding: 0.8rem 1rem 0.8rem 0;
     transition: background-color 0.2s;
     /* border: 1px solid green; */
-    /* padding-right: 10px; */
-
 }
 
 .sidebar__filter-group > summary {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
- 
-/* border: 1px solid red; */
-
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /* border: 1px solid pink; */
 }
 
-
 .sidebar__filter-group ul {
-
     width: 100%;
-
 }
 
 .sidebar__filter-group ul li {
-  list-style: none;
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 12px 0;
-  border-bottom: 1px solid #eeebe8;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeebe8;
 }
 
 .sidebar__filter-group > summary::-webkit-details-marker {
-  display: none;
-
+    display: none;
 }
 
-
 .sidebar__filter-group > summary::after {
-  content: "▼";
-  float: right;
-  transition: transform 0.3s ease;
-  
+    content: "▼";
+    float: right;
+    transition: transform 0.3s ease;
 }
 
 .sidebar__filter-group[open] > summary::after {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .sidebar__filter-group h4 {
@@ -104,6 +91,7 @@
     letter-spacing: 0.05em;
     width: 100%;
 }
+
 .sidebar__filter-group img{
     width: 14px;
     height: 14px;
@@ -129,16 +117,13 @@
     width: 97%;
     margin-top: 20px;
     margin-right: 20px;
-  transition: background 0.16s, transform 0.13s;
-
-
+    transition: background 0.16s, transform 0.13s;
 }
 
 .sidebar__clear:hover,
 .sidebar__clear:focus {
-  /* color: #e5a97a; */
-  background-color: #3a2926;
-  transform: scale(1.03);
+    background-color: #3a2926;
+    transform: scale(1.03);
 }
 
 .sidebar__products {
@@ -160,8 +145,208 @@
     font-size: 11px;
 }
 
+/* Mobile Filter Button */
+.mobile-filter-button-container {
+    display: none;
+    position: fixed;
+    /* bottom: 20px;
+    left: 20px; */
+    z-index: 90;
+    margin: 20px;
+}
+
+.mobile-filter-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: #3a2926;
+    border: 1px solid #3a2926;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.mobile-filter-button:active {
+    transform: scale(0.98);
+    background-color: #f9f9f9;
+}
+
+.mobile-filter-button img {
+    width: 18px;
+    height: 18px;
+    filter: invert(100%);
+}
+
+/* Mobile Filter Close Button */
+.mobile-filter-close {
+    display: none; /* Hidden by default on all devices */
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #3a2926;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-filter-close:active {
+    transform: scale(0.9);
+}
+
+/* Mobile Filter Overlay */
+.mobile-filter-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 95;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+}
+
+.mobile-filter-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Mobile Filter Sidebar */
+.mobile-filter {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 70%;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 100;
+    overflow-y: auto;
+    transition: left 0.3s ease-out;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    padding-bottom: 80px;
+    border-right: 1px solid #eaeaea;
+    /* border: 1px solid red; */
+}
+
+.mobile-filter.open {
+    left: 0;
+}
+
+/* Media Queries */
 @media (max-width: 900px) {
-    .sidebar {
+    /* Hide desktop elements on mobile */
+    .desktop-filter {
+        display: none;
+    }
+    
+    .desktop-filter-icon {
+        display: none !important; /* Ensure it's definitely hidden */
+    }
+
+    /* Show mobile elements on mobile */
+    .mobile-filter-button-container {
+        display: block;
+    }
+
+    .mobile-filter {
+        display: flex;
+        flex-direction: column;
+        /* justify-content: flex-start; */
+    }
+
+    .mobile-filter-close {
+        display: flex; /* Show only on mobile */
+    }
+
+    .mobile-filter-overlay {
+        display: block;
+    }
+
+    /* Mobile-specific styles for filter content */
+    .mobile-filter .sidebar__filter-header {
+        /* padding: 15px 20px 15px 15px; */
+        height: auto;
+        border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 5px;
+        position: sticky;
+        top: 0;
+        background: #ffffff;
+        z-index: 10;
+        /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mobile-filter .filter-options {
+        padding-right: 30px;
+        padding-top: 10px;
+        /* border: 1px solid green; */
+    }
+
+    .mobile-filter .sidebar__filter-group {
+        width: 95%;
+        /* padding: 12px 3rem 12px 0; */
+        /* border: 1px solid red; */
+    }
+
+    .mobile-filter .sidebar__filter-group > summary {
+        font-weight: 500;
+    }
+    
+    .mobile-filter .filter-option {
+        /* padding: 12px 0; */
+    }
+    
+    .mobile-filter .filter-option__checkbox {
+        width: 18px;
+        height: 18px;
+    }
+
+    .mobile-filter .sidebar__clear {
+        width: 90%;
+        margin: 20px auto;
+        display: block;
+        position: sticky;
+        bottom: 20px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 12px 18px;
+    }
+}
+
+/* Hide the original filter button in mobile view */
+@media (max-width: 768px) {
+    .original-filter-button {
         display: none;
     }
 }
