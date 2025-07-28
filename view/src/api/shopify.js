@@ -1,9 +1,10 @@
+const ip = "localhost"
 
-export async function fetchProducts() {
-  const endpoint = `http://192.168.43.146:8001/shopify/products/`;
+
+export async function fetchProducts(queryParams = '') {
+  const endpoint = `http://${ip}:8001/shopify/products/${queryParams}`;
 
  try{
-
    const res = await fetch(endpoint, {
     method: "POST",
   });
@@ -13,16 +14,17 @@ export async function fetchProducts() {
   if(data){
     return data;
   }else{
-    return false;
+    return [];
   }
 
  }catch(err){
   console.log(err.message);
+  return [];
  }
 };
 
 export async function createCart(merchandiseId, quantity = 1) {
-  const res = await fetch("http://192.168.43.146:8001/shopify/create-cart", {
+  const res = await fetch(`http://${ip}:8001/shopify/create-cart`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

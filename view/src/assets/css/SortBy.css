@@ -6,8 +6,6 @@
   font-size: 13px;
   color: #3a2926;
   min-width: 120px;
-  margin-left: 15px;
-  position: absolute;
   right: 0;
   z-index: 10;
 }
@@ -23,13 +21,30 @@
 }
 
 .sort-by__container:hover {
+
   background-color: rgba(229, 229, 229, 0.3);
-}  .sort-by__label {
+
+}  
+.sort-by__label {
     font-weight: 500;
     letter-spacing: 0.08em;
-    text-transform: lowercase;
+    /* text-transform: lowercase; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+  .sort-by__label.mobile{
+
+    display: none;
   }
 
+  .sort-by__label img{
+
+    width: 30px;
+    height: 20px;
+
+  }
   .sort-by__arrow {
     font-size: 10px;
     margin-top: 2px;
@@ -66,6 +81,9 @@
   color: #3a2926;
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid #e5e5e5;
+  /* padding: 0px 15px; */
+  margin: 0px 10px;
 }
 
 .sort-by__option:hover {
@@ -111,8 +129,8 @@
     padding: 10px;
     width: 100%;
     justify-content: center;
-    background: white;
-    border: 1px solid #000;
+    /* background: white; */
+    /* border: 1px solid #000; */
     border-radius: 0;
     height: 40px;
   }
@@ -131,12 +149,23 @@
     font-size: 14px;
     text-align: center;
   }
+
+   .sort-by__label.mobile{
+
+    display: block;
+  }
+
+
+   .sort-by__label.desktop{
+        display: none;
+    }
   
   /* Mobile sort button specific styles */
   .mobile-sort-btn .sort-by__container {
-    background: white;
+    /* background: white; */
     border: 1px solid #000;
-    border-radius: 0;
+    /* border-radius: 0; */
+    width: fit-content;
   }
   
   .mobile-sort-btn .sort-by {

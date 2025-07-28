@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
-import './LoginPopup.css';
+import '../assets/css/LoginPopup.css';
 
 const LoginPopup = ({ isOpen, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
 
   const handleSendOtp = () => {
     // In a real application, you would send an API request here
+
     if (phoneNumber.length === 10) {
-      setOtpSent(true);
+
+fetch(`http://localhost:8001/verify/send-otp`,
+  { method: 'POST',
+    body: JSON.stringify({ phoneNumber: phoneNumber }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setOtpSent(true);
+        } else {
+          console.log("Failed to send OTP");
+        }
+      });
     }
   };
 
@@ -27,15 +44,32 @@ const LoginPopup = ({ isOpen, onClose }) => {
       setOtp(newOtp);
       
       // Auto-focus next input
-      if (value && index < 3) {
+      if (value && index < 5) {
         document.getElementById(`otp-${index + 1}`).focus();
       }
+    
     }
   };
 
   const handleVerifyOtp = () => {
     // In a real application, you would verify the OTP here
-    onClose();
+
+    fetch(`http://localhost:8001/verify/verify-otp`,
+  { method: 'POST',
+    body: JSON.stringify({ phoneNumber: phoneNumber, otp: otp.join('') }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          onClose();
+        } else {
+          console.log("Failed to verify OTP");
+        }
+      });
   };
 
   if (!isOpen) return null;
@@ -45,7 +79,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
       <div className="login-popup">
         <button className="login-popup__close" onClick={onClose}>×</button>
         <div className="login-popup__header">
-          <h2>Login to TH EDIT</h2>
+          <h2>Login to T H E</h2>
           <p>Enter your details to access your account</p>
         </div>
 
@@ -69,13 +103,13 @@ const LoginPopup = ({ isOpen, onClose }) => {
                 onClick={handleSendOtp}
                 disabled={phoneNumber.length !== 10}
               >
-                Send OTP
+                Send otp on <img  src={require("../assets/images/whatsapp-icon.png")} alt="WhatsApp" />
               </button>
             </>
           ) : (
             <>
               <div className="login-popup__input-group">
-                <label>Enter OTP sent to +1 {phoneNumber}</label>
+                <label>Enter OTP sent to +91 {phoneNumber}</label>
                 <div className="login-popup__otp-container">
                   {otp.map((digit, index) => (
                     <input

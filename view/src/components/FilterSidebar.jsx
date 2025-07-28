@@ -2,6 +2,7 @@ import React, { useEffect, useState, forwardRef, useImperativeHandle } from "rea
 import "../assets/css/FilterSidebar.css";
 import "../assets/css/FilterOptions.css";
 import "../assets/css/LoadingAnimations.css"; // Import loading animations
+const ip = "localhost";
 
 const FilterSidebar = forwardRef((props, ref) => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -9,9 +10,11 @@ const FilterSidebar = forwardRef((props, ref) => {
   const [loading, setLoading] = useState(true);
 
   const toggleMobileFilter = () => {
-    setIsMobileFilterOpen(!isMobileFilterOpen);
+    const newState = !isMobileFilterOpen;
+    setIsMobileFilterOpen(newState);
+    
     // Prevent body scrolling when filter is open
-    if (!isMobileFilterOpen) {
+    if (newState) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -25,7 +28,7 @@ const FilterSidebar = forwardRef((props, ref) => {
 
   const fetchCollections = async () => {
     try {
-      const response = await fetch("http://192.168.43.146:8001/shopify/collections");
+      const response = await fetch(`http://${ip}:8001/shopify/collections`);
       const data = await response.json();
       return data.collections || []; // Extract the collections array from the response
     } catch (error) {
@@ -55,32 +58,91 @@ const FilterSidebar = forwardRef((props, ref) => {
     };
   }, []);
 
+  // Update overlay visibility when filter state changes
+  useEffect(() => {
+    const overlay = document.querySelector('.mobile-filter-overlay');
+    if (overlay) {
+      if (isMobileFilterOpen) {
+        overlay.style.display = 'block';
+        // Allow a tiny delay for the display to take effect before adding the open class for animation
+        setTimeout(() => {
+          overlay.classList.add('open');
+        }, 10);
+      } else {
+        overlay.classList.remove('open');
+        // Delay hiding the overlay until after animation completes
+        setTimeout(() => {
+          if (!isMobileFilterOpen) {
+            overlay.style.display = 'none';
+          }
+        }, 300); // Match transition duration
+      }
+    }
+  }, [isMobileFilterOpen]);
+
+  // State for sort option
+  const [selectedSortOption, setSelectedSortOption] = useState("");
+
+  const handleSortOptionChange = (option) => {
+    setSelectedSortOption(option);
+    // Here you would implement actual sorting logic
+    console.log("Sorting by:", option);
+  };
+
   // Common filter options that will be used in both desktop and mobile
   const filterOptions = (
     <>
       <div className="filter-options">
         <details className="sidebar__filter-group">
-          <summary>
-            CATEGORY
-          </summary>
-          <div className="filter-group__options">
-            {loading ? (
-              <div className="filter-option">
-                <div className="spinner-circle" style={{ width: '20px', height: '20px', margin: '8px auto' }}></div>
-                <div style={{ textAlign: 'center', fontSize: '14px' }}>Loading categories...</div>
-              </div>
-            ) : collections && collections.length > 0 ? 
-              collections.map((collection) => (
-                <div className="filter-option" key={collection.id}>
-                  <input type="checkbox" id={`cat-${collection.id}`} className="filter-option__checkbox" />
-                  <label htmlFor={`cat-${collection.id}`} className="filter-option__label">{collection.title}</label>
-                  <span className="filter-option__count">(10)</span>
-                </div>
-              )) : 
-              <div className="filter-option">No categories found</div>
-            }
+          <summary>PRICE RANGE</summary>
+          {/* ...price options... */}
+        </details>
+        <details className="sidebar__filter-group">
+          <summary>COLOR</summary>
+          {/* ...color options... */}
+        </details>
+        <details className="sidebar__filter-group">
+          <summary>BRANDS</summary>
+          {/* ...brand options... */}
+        </details>
+        <details className="sidebar__filter-group">
+          <summary>FAST SHIPPING</summary>
+          {/* ...shipping options... */}
+        </details>
+      </div>
+      <button className="sidebar__clear">CLEAR FILTERS</button>
+    </>
+  );
+
+  // Mobile-only filter options with sort options included
+  const mobileFilterOptions = (
+    <>
+      <div className="filter-options">
+        {/* Sort options - Mobile only */}
+        <details className="sidebar__filter-group mobile-sort-options">
+          <summary>SORT BY</summary>
+          <div className="filter-group__options sort-options">
+            <div 
+              className={`sort-option ${selectedSortOption === "Price: Low to High" ? "selected" : ""}`}
+              onClick={() => handleSortOptionChange("Price: Low to High")}
+            >
+              Price: Low to High
+            </div>
+            <div 
+              className={`sort-option ${selectedSortOption === "Price: High to Low" ? "selected" : ""}`}
+              onClick={() => handleSortOptionChange("Price: High to Low")}
+            >
+              Price: High to Low
+            </div>
+            <div 
+              className={`sort-option ${selectedSortOption === "Newest" ? "selected" : ""}`}
+              onClick={() => handleSortOptionChange("Newest")}
+            >
+              Newest
+            </div>
           </div>
         </details>
+
         <details className="sidebar__filter-group">
           <summary>PRICE RANGE</summary>
           {/* ...price options... */}
@@ -117,22 +179,16 @@ const FilterSidebar = forwardRef((props, ref) => {
         {filterOptions}
       </aside>
       
-      {/* Mobile Filter Button - shown only in desktop layout */}
-      <div className="mobile-filter-button-container original-filter-button">
-        <button className="mobile-filter-button" onClick={toggleMobileFilter}>
-          <span>FILTERS</span>
-          <img src={require("../assets/images/filter-icon.png")} alt="Filter" />
-         
-        </button>
-      </div>
-      
       {/* Mobile Filter Overlay */}
-      <div className={`mobile-filter-overlay ${isMobileFilterOpen ? 'open' : ''}`} onClick={toggleMobileFilter}></div>
+      <div 
+        className={`mobile-filter-overlay ${isMobileFilterOpen ? 'open' : ''}`}
+        onClick={toggleMobileFilter}
+      ></div>
       
       {/* Mobile Filter Sidebar */}
       <aside className={`filter-sidebar mobile-filter ${isMobileFilterOpen ? 'open' : ''}`}>
         <div className="sidebar__filter-header">
-          <h4>FILTERS</h4>
+          <h4>FILTERS & SORT</h4>
           <button 
             className="mobile-filter-close" 
             onClick={toggleMobileFilter}
@@ -141,7 +197,7 @@ const FilterSidebar = forwardRef((props, ref) => {
             ✕
           </button>
         </div>
-        {filterOptions}
+        {mobileFilterOptions}
       </aside>
     </>
   );

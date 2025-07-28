@@ -5,13 +5,14 @@ import '../assets/css/ProductDetails.css';
 import '../assets/css/LoadingAnimations.css'; // Import loading animations
 import Banner from './Banner';
 import ProductGrid from './ProductGrid';
+const ip = "localhost"; // Define your IP address or endpoint here
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState('features');
+  // const [activeTab, setActiveTab] = useState('features');
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
 
@@ -24,7 +25,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true); // Set loading to true when fetching starts
-        const response = await fetch(`http://192.168.43.146:8001/shopify/product/${id}`, {
+        const response = await fetch(`http://${ip}:8001/shopify/product/${id}`, {
           method: 'POST',
         });
 
@@ -126,13 +127,24 @@ const ProductDetails = () => {
           <div className="product-details__info">
             <h1 className="product-details__name">{product.title}</h1>
 
-            <div className="product-details__rating">
+            {/* <div className="product-details__rating">
               <div className="stars">
                 {'★'.repeat(Math.floor(productRating))}
                 {productRating % 1 !== 0 ? '☆' : ''}
                 {'☆'.repeat(5 - Math.ceil(productRating))}
               </div>
               <span className="rating-text">{productRating} ({reviewCount} Reviews)</span>
+            </div> */}
+
+            <div className="product-details_price_section">
+              <span className="product-details__price">
+                ₹{product.variants.edges[0].node.price.amount}
+              </span>
+             
+                <span className="product-details__compare-price">
+                  ₹1000
+                </span>
+
             </div>
 
             <div className="product-details__description">

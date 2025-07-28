@@ -28,6 +28,39 @@
     font-weight: 400;
 }
 
+/* Sort options inside filter sidebar */
+.filter-group__options.sort-options {
+    padding: 10px 0;
+}
+
+.sort-option {
+    padding: 12px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #eeebe8;
+}
+
+.sort-option:hover {
+    background-color: rgba(58, 41, 38, 0.05);
+}
+
+.sort-option.selected {
+    font-weight: bold;
+    color: #ef771b;
+}
+
+/* Add special styles for mobile sort options */
+@media (max-width: 768px) {
+    .mobile-sort-options {
+        border-bottom: 2px solid #e5e5e5 !important;
+    }
+    
+    .mobile-filter .sort-option {
+        padding: 15px 0;
+        font-size: 14px;
+    }
+}
+
 .filter-options{
     display: flex;
     flex-direction: column;
@@ -235,6 +268,7 @@
 }
 
 .mobile-filter-overlay.open {
+    display: block !important;
     opacity: 1;
     pointer-events: auto;
 }
@@ -323,8 +357,9 @@
         font-weight: 500;
     }
     
+    /* Mobile filter option styles */
     .mobile-filter .filter-option {
-        /* padding: 12px 0; */
+        padding: 10px 0;
     }
     
     .mobile-filter .filter-option__checkbox {

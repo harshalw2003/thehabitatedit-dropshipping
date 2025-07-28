@@ -1,9 +1,203 @@
 /* BestSellers.css */
-.bestsellers { background: #fff; border-radius: 8px; box-shadow: 0 1px 6px #0001; padding: 18px; margin: 24px 0; }
-.bestsellers h3 { font-size: 18px; color: #3a2926; margin-bottom: 18px; }
-.bestsellers__card { display: flex; align-items: center; }
-.bestsellers__img img { width: 60px; height: 60px; object-fit: contain; margin-right: 16px; }
-.bestsellers__info span { font-size: 11px; color: #e5a97a; }
-.bestsellers__info h4 { font-size: 15px; color: #3a2926; margin: 2px 0; }
-.bestsellers__rating { font-size: 13px; color: #e5a97a; }
-.bestsellers__price { font-size: 15px; color: #3a2926; font-weight: 600; }
+.bestsellers-section {
+  
+ 
+  }
+
+.bestsellers-container {
+
+  width: 100vw;
+  box-sizing: border-box;
+  
+}
+
+.bestseller-header{
+
+    width: 99%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 4%;
+    align-items: center;
+   
+
+}
+.bestseller-header h2 {
+  text-align: center;
+  /* margin-bottom: 30px; */
+  font-size: 28px;
+  color: #3a2926;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+
+}
+
+.bestsellers-grid {
+  /* Uses the existing ProductGrid styling */
+  margin-bottom: 40px;
+}
+
+/* Browse All Products button */
+.browse-all-container {
+    display: flex;
+    justify-content: center;
+    
+    
+}
+.browse-all-container.mobile{
+
+    display: none;
+}
+
+.browse-all-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background-color: #ef771b;
+    color: white;
+    padding: 0px 10px;
+    border-radius: 4px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    height: 40px;
+}
+
+.browse-all-button:hover {
+    background-color: #d16714;
+}
+
+.bestsellers-grid .product-grid__arrow {
+  /* Add styles for the arrow icon here */
+  display: none;
+}
+
+.button-arrow {
+
+    width: 20px;
+    height: 16px;
+    margin-top: -5px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 500px) {
+  .bestsellers-grid {
+   margin-bottom: 10px;
+  }
+
+  .bestseller-header{
+
+   
+    padding: 5px 5%;
+    height: fit-content;
+   
+}
+  
+  .bestsellers-section h2 {
+    font-size: 22px;
+  }
+
+  .browse-all-container.desktop{
+
+    display: none;
+}
+.browse-all-container.mobile{
+
+    display: flex;
+    /* border:1px solid  #3a2926; */
+    justify-content: start;
+    padding: 5px 3%;
+
+
+}
+
+.browse-all-button {
+    font-size: 14px;
+    padding: 0px 5px;
+    height: 35px;
+    background-color: transparent;
+    color: #d16714;
+    border: 1px solid #d16714;
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+}
+
+.button-arrow{
+
+  background-color: #d16714;
+
+}
+
+
+
+.bestsellers-grid .product-grid__list {
+    
+    gap:  0 16px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0 ;
+    overflow-x: auto;
+  }
+  .bestsellers-grid .product-grid__item {
+ width: 70vw;
+ background: #f5f2ef;
+ min-height: 40vh;
+ 
+  
+  
+}
+
+ .bestsellers-grid  .product-grid__img{
+
+  background: transparent;
+  height: 40vh;
+    
+  }
+   .bestsellers-grid  .product-grid__img img{
+
+  width: 150px;
+  height: 130px;
+   }
+
+    .bestsellers-grid .product-grid__name_price {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .bestsellers-grid .product-grid__cat{
+
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    width: fit-content;
+    font-size: 10px;
+    padding: 2px;
+
+  }
+   .bestsellers-grid .product-grid__name{
+
+    font-size: 0.71rem;
+  }
+
+  .bestsellers-grid .product-grid__price{
+
+    display: none;
+  } 
+  .bestsellers-grid .product-grid__arrow {
+  /* Add styles for the arrow icon here */
+  display: block;
+  font-size: 15px;
+
+}
+
+.bestsellers-grid .product-grid__actions{
+
+  display: none;
+
+}
+}

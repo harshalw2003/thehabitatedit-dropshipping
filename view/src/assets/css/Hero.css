@@ -1,12 +1,12 @@
 .hero{
-
     display: flex;
     /* border: 1px solid red; */
     height: 30vh;
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
     /* border: 1px solid black; */
-
-
 }
 
 .hero_info{
@@ -112,7 +112,7 @@
     position: relative;
     padding: 20px 0 30px;
     /* background-color: #fff; */
-    border-bottom: 2px solid #e5e5e5;
+    /* border-bottom: 2px solid #e5e5e5; */
   }
     
   .hero_info {

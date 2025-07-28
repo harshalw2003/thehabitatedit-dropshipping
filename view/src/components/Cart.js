@@ -51,6 +51,13 @@ const Cart = () => {
       <Header />
       
       <div className="cart-container">
+        <div className="cart-quote-container">
+          <div className="cart-quote">
+            <p>"Shop with confidence, create your space with intention."</p>
+            <span className="quote-author">— THE HABITAT EDIT</span>
+          </div>
+        </div>
+
         <h1 className="cart-title">YOUR BAG</h1>
         
         {cartItems.length === 0 ? (
@@ -152,9 +159,38 @@ const Cart = () => {
                   <span className="payment-icon">PayPal</span>
                 </div>
               </div>
+
+              <div className="secure-checkout">
+                <div className="secure-icon">🔒</div>
+                <span>Secure Checkout</span>
+              </div>
             </div>
           </div>
         )}
+        
+        <div className="cart-features">
+          <div className="feature">
+            <div className="feature-icon">✓</div>
+            <div className="feature-content">
+              <h4>Quality Guaranteed</h4>
+              <p>All products are carefully selected for quality and durability</p>
+            </div>
+          </div>
+          <div className="feature">
+            <div className="feature-icon">🚚</div>
+            <div className="feature-content">
+              <h4>Fast Shipping</h4>
+              <p>Orders over £50 qualify for free shipping</p>
+            </div>
+          </div>
+          <div className="feature">
+            <div className="feature-icon">↩️</div>
+            <div className="feature-content">
+              <h4>Easy Returns</h4>
+              <p>30-day hassle-free return policy</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

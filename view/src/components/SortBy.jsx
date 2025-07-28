@@ -30,13 +30,14 @@ export default function SortBy() {
   return (
     <div className="sort-by" ref={dropdownRef}>
       <div className="sort-by__container" onClick={toggleDropdown}>
-        <span className="sort-by__label">SORT BY</span>
-        <span className={`sort-by__arrow ${isDropdownOpen ? 'rotated' : ''}`}>▼</span>
+        <span className="sort-by__label desktop"> SORT BY <img  src={require("../assets/images/sort-icon.png")}  alt="" /></span>
+        <span className="sort-by__label mobile"><img  src={require("../assets/images/sort-icon.png")}  alt="" /></span>
+        {/* <span className={`sort-by__arrow ${isDropdownOpen ? 'rotated' : ''}`}>▼</span> */}
       </div>
       
       {isDropdownOpen && (
         <div className="sort-by__dropdown">
-          <div 
+          {/* <div 
             className={`sort-by__option ${selectedOption === "Featured" ? "selected" : ""}`}
             onClick={() => {
               setSelectedOption("Featured");
@@ -44,7 +45,7 @@ export default function SortBy() {
             }}
           >
             Featured
-          </div>
+          </div> */}
           <div 
             className={`sort-by__option ${selectedOption === "Price: Low to High" ? "selected" : ""}`}
             onClick={() => {

@@ -11,8 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 
 //importing Routes
 const shopifyRoutes = require("./routes/shopify.js")
+const verifyRoutes = require("./routes/verify.js")
 app.use('/shopify',shopifyRoutes)
-
+app.use('/verify',verifyRoutes)
 
 const serverUp = () => {
 
