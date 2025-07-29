@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../assets/css/LoginPopup.css';
+const ip = "localhost"
 
 const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [firstName, setFirstName] = useState('');
@@ -28,7 +29,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
         ? { firstName, lastName, phoneNumber }
         : { phoneNumber };
         
-      fetch(`http://localhost:8001/user/send-otp`,
+      fetch(`http://${ip}:8001/user/send-otp`,
         { method: 'POST',
           body: JSON.stringify(requestBody),
           headers: {
@@ -88,7 +89,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
     // Show verifying message
     setAlert({ message: 'Verifying OTP...', type: 'info' });
     
-    fetch(`http://localhost:8001/user/verify-otp`,
+    fetch(`http://${ip}:8001/user/verify-otp`,
       { method: 'POST',
         body: JSON.stringify({ 
           phoneNumber: phoneNumber, 

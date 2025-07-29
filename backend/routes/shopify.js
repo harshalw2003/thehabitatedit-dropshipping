@@ -32,15 +32,20 @@ router.post("/products", async (req, res) => {
                 }
               }
             }
-              collections(first: 3) {
-  edges {
-    node {
-      id
-      title
-      handle
-    }
-  }
-}
+              collections(first: 10) {
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            image {
+              url
+              altText
+            }
+          }
+        }
+      }
               
           }
         }
@@ -61,7 +66,7 @@ router.post("/products", async (req, res) => {
 
   const data = await response.json();
   if (data) {
-    console.log("Products fetched successfully:", JSON.stringify(data));
+    // console.log("Products fetched successfully:", JSON.stringify(data));
     res.json(data);
   } else {
     res.json({
@@ -116,54 +121,53 @@ router.post("/create-cart", async (req, res) => {
 });
 
 router.post("/product/:id", async (req, res) => {
-  console.log("Fetching product details for ID:", req.params.id);
-  const id = `gid://shopify/Product/${req.params.id}`;
+  console.log("Fetching product details for handle:", req.params.id);
+  const handle = req.params.id;
 
-  if (!id) {
-    return res.status(400).json({ error: "Error fetching id of the product" });
+  if (!handle) {
+    return res.status(400).json({ error: "Error fetching handle of the product" });
   }
 
   const query = `
-    query getProductById($id: ID!) {
-      node(id: $id) {
-        ... on Product {
-          id
-          title
-          description
-          productType
-          handle
-          tags
-          availableForSale
-          images(first: 5) {
-            edges {
-              node {
-                url
-                altText
-              }
+    query getProductByHandle($handle: String!) {
+      product(handle: $handle) {
+        id
+        title
+        description
+        images(first: 5) {
+          edges {
+            node {
+              url
+              altText
             }
           }
-          variants(first: 5) {
-            edges {
-              node {
-                id
-                title
-                price {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-            collections(first: 3) {
-  edges {
-    node {
-      id
-      title
-      handle
-    }
-  }
-}
         }
+        variants(first: 5) {
+          edges {
+            node {
+              id
+              title
+              price {
+                amount
+                currencyCode
+              }
+            }
+          }
+        }
+          collections(first: 5) {
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            image {
+              url
+              altText
+            }
+          }
+        }
+      }
       }
     }
   `;
@@ -175,7 +179,7 @@ router.post("/product/:id", async (req, res) => {
         "Content-Type": "application/json",
         "X-Shopify-Storefront-Access-Token": STOREFRONT_ACCESS_TOKEN,
       },
-      body: JSON.stringify({ query, variables: { id } }),
+      body: JSON.stringify({ query, variables: { handle } }),
     });
 
     const data = await response.json();

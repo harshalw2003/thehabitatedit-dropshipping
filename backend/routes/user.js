@@ -12,8 +12,59 @@ const authenticate = require('../middleware/auth.js');
 
 dotenv.config();
 
-
 const router = express.Router();
+
+router.post("/update-cart-quantity", authenticate.authenticateToken, async (req, res) => {
+  try {
+    const { productId, variantId, quantity } = req.body;
+    console.log("Updating cart quantity for user:", req.user._id);
+    
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ success: false, message: "Invalid quantity" });
+    }
+    
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    // Find the item in the cart and update quantity
+    const cartItem = user.cart.find(item => 
+      item.productId === productId && item.variantId === variantId
+    );
+    
+    if (!cartItem) {
+      return res.status(404).json({ success: false, message: "Item not found in cart" });
+    }
+    
+    cartItem.quantity = quantity;
+    await user.save();
+    
+    console.log("Updated user cart:", user.cart);
+    res.status(200).json({ success: true, message: "Cart quantity updated", cart: user.cart });
+  } catch (error) {
+    console.error("Error updating cart quantity:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post("/remove-from-cart", authenticate.authenticateToken, async (req, res) => {
+  try {
+    const { productId, variantId } = req.body;
+    console.log("Removing item from cart for user:", req.user._id);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    user.cart = user.cart.filter(item => item.productId !== productId || item.variantId !== variantId);
+    await user.save();
+    console.log("Updated user cart:", user.cart);
+    res.status(200).json({ success: true, message: "Product removed from cart", cart: user.cart });
+  } catch (error) {
+    console.error("Error removing from cart:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 
 function generateOTP() {
@@ -159,15 +210,33 @@ router.post("/cart", authenticate.authenticateToken, async (req, res) => {
   }
 })
 
+router.post("/add-to-cart", authenticate.authenticateToken, async (req, res) => {
+  try {
+    const { productHandle, productId, variantId, quantity } = req.body;
+    console.log("Adding item to cart for user:", req.user._id);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    user.cart.push({ productHandle: productHandle, productId: productId, variantId: variantId, quantity: quantity });
+    await user.save();
+    console.log("Product added to user cart:", user.cart);
+    res.status(200).json({ success: true, cart: user.cart });
+  } catch (error) {
+    console.error("Error adding to cart:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 router.post("/remove-from-cart", authenticate.authenticateToken, async (req, res) => {
   try {
-    const { productId, variantId, quantity } = req.body;
+    const { productHandle, productId, variantId, quantity } = req.body;
     console.log("Removing item from cart for user:", req.user._id);
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
-    user.cart = user.cart.filter(item => item.productId !== productId || item.variantId !== variantId);
+    user.cart = user.cart.filter(item => item.productId !== productId || item.variantId !== variantId || item.productHandle !== productHandle);
     await user.save();
     console.log("Updated user cart:", user.cart);
     res.status(200).json({ success: true, cart: user.cart });
@@ -176,6 +245,73 @@ router.post("/remove-from-cart", authenticate.authenticateToken, async (req, res
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
+// Get user's wishlist
+router.get("/get-wishlist", authenticate.authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    res.status(200).json({ 
+      success: true, 
+      message: "Wishlist retrieved successfully", 
+      wishlist: user.wishlist 
+    });
+  } catch (error) {
+    console.error("Error retrieving wishlist:", error.message);
+    res.status(500).json({ success: false, message: "Server error retrieving wishlist" });
+  }
+});
+
+router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res) => {
+  try {
+    const { productHandle } = req.body;
+    console.log("Adding item to wishlist for user:", req.user._id);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    // Check if product already exists in wishlist
+    const productExists = user.wishlist.some(item => item.productHandle === productHandle);
+    
+    if (productExists) {
+      console.log("Product already in wishlist");
+      return res.status(200).json({ success: true, message: "Product already in wishlist", wishlist: user.wishlist });
+    }
+    
+    // Add to wishlist only if it doesn't exist
+    user.wishlist.push({ productHandle: productHandle });
+    await user.save();
+    console.log("Product added to user wishlist:", user.wishlist);
+    res.status(200).json({ success: true, message: "Product added to wishlist", wishlist: user.wishlist });
+  } catch (error) {
+    console.error("Error adding to wishlist:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post("/remove-from-wishlist", authenticate.authenticateToken, async (req, res) => {
+  try {
+    const { productHandle } = req.body;
+    console.log("Removing item from wishlist for user:", req.user._id);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    user.wishlist = user.wishlist.filter(item => item.productHandle !== productHandle);
+    await user.save();
+    console.log("Updated user wishlist:", user.wishlist);
+    res.status(200).json({ success: true, message: "Product removed from wishlist", wishlist: user.wishlist });
+  } catch (error) {
+    console.error("Error removing from wishlist:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+
 
 
 

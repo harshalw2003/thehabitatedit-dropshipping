@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/css/ProductGrid.css";
 import "../assets/css/LoadingAnimations.css"; // Import loading animations
-import { fetchProducts, createCart } from "../api/shopify";
+import { fetchProducts, addToWishlist, removeFromWishlist, addToCart } from "../api/shopify";
+import CartNotification from "./CartNotification";
 
 
 export default function ProductGrid({ category = null, limit = null, sort = null }) {
@@ -10,6 +11,11 @@ export default function ProductGrid({ category = null, limit = null, sort = null
   const [loading, setLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false); // State for controlling fade-in animation
   const [wishlist, setWishlist] = useState([]); // State to track wishlist items
+  const [notification, setNotification] = useState({
+    visible: false,
+    message: '',
+    product: null
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -44,16 +50,54 @@ export default function ProductGrid({ category = null, limit = null, sort = null
       });
   }, [category, limit, sort]);
   
-  // Load wishlist from localStorage on component mount
+  // Load wishlist from backend when user is authenticated
   useEffect(() => {
-    try {
-      const savedWishlist = localStorage.getItem('wishlist');
-      if (savedWishlist) {
-        setWishlist(JSON.parse(savedWishlist));
+    const fetchWishlist = async () => {
+      const authToken = localStorage.getItem('authToken');
+      if (authToken) {
+        try {
+          const response = await fetch(`http://localhost:8001/user/get-wishlist`, {
+            headers: {
+              'Authorization': `Bearer ${authToken}`
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.wishlist) {
+              // Extract just the product handles from the wishlist items
+              const wishlistHandles = data.wishlist.map(item => item.productHandle);
+              setWishlist(wishlistHandles);
+              // Still save to localStorage as a cache
+              localStorage.setItem('wishlist', JSON.stringify(wishlistHandles));
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching wishlist from server:", error);
+          // Fall back to localStorage if server request fails
+          try {
+            const savedWishlist = localStorage.getItem('wishlist');
+            if (savedWishlist) {
+              setWishlist(JSON.parse(savedWishlist));
+            }
+          } catch (localError) {
+            console.error("Error loading wishlist from localStorage:", localError);
+          }
+        }
+      } else {
+        // If not logged in, just use localStorage
+        try {
+          const savedWishlist = localStorage.getItem('wishlist');
+          if (savedWishlist) {
+            setWishlist(JSON.parse(savedWishlist));
+          }
+        } catch (error) {
+          console.error("Error loading wishlist from localStorage:", error);
+        }
       }
-    } catch (error) {
-      console.error("Error loading wishlist from localStorage:", error);
-    }
+    };
+    
+    fetchWishlist();
   }, []);
 
   function trimProductTitle(title, maxWords = 5, maxChars = 50) {
@@ -77,11 +121,6 @@ export default function ProductGrid({ category = null, limit = null, sort = null
 
   const productsArray = products?.data?.products?.edges || [];
   console.log("Products array", productsArray)
-  const cartHandler = (id) => {
-    createCart(id).then((checkoutUrl) => {
-      window.location.href = checkoutUrl;
-    });
-  };
 
   const cleanProductId = (id) => {
     const productId = id.split("/").pop(); // "9559713710320"
@@ -90,34 +129,113 @@ export default function ProductGrid({ category = null, limit = null, sort = null
     return productId
   }
   
-  // Function to toggle wishlist items
-  const toggleWishlist = (productId) => {
-    setWishlist(prevWishlist => {
-      let newWishlist;
+  const cleanVariantId = (id) => {
+    return id.split("/").pop(); // Clean the variant ID
+  }
+  
+  // Function to handle adding to cart
+  const cartHandler = async (product) => {
+    try {
+      const productHandle = product.handle;
+      const productId = cleanProductId(product.id);
+      const variantId = cleanVariantId(product.variants.edges[0].node.id);
+      console.log("Adding to cart:", productHandle, variantId);
+
+      // Add to cart API call
+      if (await addToCart(productHandle, productId, variantId, 1)) {
+        // Item added successfully, show notification
+        const productInfo = {
+          title: product.title,
+          image: product.images.edges[0]?.node.url,
+          price: product.variants.edges[0].node.price.amount
+
+        };
+        
+        // Show notification
+        setNotification({
+          visible: true,
+          message: 'Product added to cart!',
+          product: productInfo
+        });
+        
+        // Hide any previous notification
+        if (notification.visible) {
+          setNotification(prev => ({ ...prev, visible: false }));
+          setTimeout(() => {
+            setNotification({
+              visible: true,
+              message: 'Product added to cart!',
+              product: productInfo
+            });
+          }, 100);
+        }
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
+  
+  // Function to close the notification
+  const closeNotification = () => {
+    setNotification(prev => ({ ...prev, visible: false }));
+  };  // Function to toggle wishlist items
+  const toggleWishlist = async (product) => {
+    const productHandle = product.handle;
+
+    try {
+      // Check if product is already in wishlist using current state
+      const isInWishlist = wishlist.includes(productHandle);
+
+      let success = false;
       
-      // Check if product is already in wishlist
-      if (prevWishlist.includes(productId)) {
-        // Remove from wishlist
-        console.log("Removed from wishlist:", productId);
-        newWishlist = prevWishlist.filter(id => id !== productId);
+      // Make the API call
+      if (isInWishlist) {
+        // Remove from wishlist via API
+        console.log("Removing from wishlist:", productHandle);
+        success = await removeFromWishlist(productHandle);
+        console.log("Removed from wishlist response:", success);
       } else {
-        // Add to wishlist
-        console.log("Added to wishlist:", productId);
-        newWishlist = [...prevWishlist, productId];
+        // Add to wishlist via API
+        console.log("Adding to wishlist:", productHandle);
+        success = await addToWishlist(productHandle);
+        console.log("Added to wishlist response:", success);
       }
       
-      // Save updated wishlist to localStorage
-      try {
-        localStorage.setItem('wishlist', JSON.stringify(newWishlist));
-      } catch (error) {
-        console.error("Error saving wishlist to localStorage:", error);
+      if (success) {
+        // Update local state
+        setWishlist(prevWishlist => {
+          let newWishlist;
+          
+          if (isInWishlist) {
+            newWishlist = prevWishlist.filter(handle => handle !== productHandle);
+          } else {
+            newWishlist = [...prevWishlist, productHandle];
+          }
+          
+          // Save updated wishlist to localStorage
+          try {
+            localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+          } catch (error) {
+            console.error("Error saving wishlist to localStorage:", error);
+          }
+          
+          return newWishlist;
+        });
       }
-      
-      return newWishlist;
-    });
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
+    }
   }
   return (
   <section className="product-grid">
+    {/* Cart Notification */}
+    <CartNotification 
+      message={notification.message}
+      isVisible={notification.visible}
+      onClose={closeNotification}
+      product={notification.product}
+    />
+    
     {/* <div className="product-grid__title">
       <h1>Products</h1>
     </div> */}
@@ -149,8 +267,8 @@ export default function ProductGrid({ category = null, limit = null, sort = null
     ) : (
       <div className={`product-grid__list ${fadeIn ? "fade-in" : ""}`}>
         {productsArray.map((product, index) => (
-        <div className="product-grid__link-container" key={`product-${cleanProductId(product.node.id)}`}>
-          <Link to={`/product/${cleanProductId(product.node.id)}`} className="product-grid__link">
+        <div className="product-grid__link-container" key={`product-${product.node.handle}`}>
+          <Link to={`/product/${product.node.handle}`} className="product-grid__link">
             <div className="product-grid__item" style={{animationDelay: `${index * 0.05}s`}}>
               <div className="product-grid__img">
                 <img
@@ -164,20 +282,20 @@ export default function ProductGrid({ category = null, limit = null, sort = null
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      cartHandler(product.node.variants.edges[0].node.id);
+                      cartHandler(product.node);
                     }}
                     title="Add to Cart"
                   >
                     <img src={require("../assets/images/add-to-cart-icon.png")} alt="Add to Cart" />
                   </button>
                   <button 
-                    className={`product-grid__action-btn wishlist-btn ${wishlist.includes(cleanProductId(product.node.id)) ? 'active' : ''}`}
+                    className={`product-grid__action-btn wishlist-btn ${wishlist.includes(product.node.handle) ? 'active' : ''}`}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      toggleWishlist(cleanProductId(product.node.id));
+                      toggleWishlist(product.node);
                     }}
-                    title={wishlist.includes(cleanProductId(product.node.id)) ? "Remove from Wishlist" : "Add to Wishlist"}
+                    title={wishlist.includes(product.node.handle) ? "Remove from Wishlist" : "Add to Wishlist"}
                     style={{ 
                       background: 'none', 
                       border: 'none',
@@ -185,7 +303,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
                       backgroundColor: 'transparent'
                     }}
                   >
-                    {wishlist.includes(cleanProductId(product.node.id)) ? (
+                    {wishlist.includes(product.node.handle) ? (
                       <img src={require("../assets/images/wishlist-filled-icon.png")} alt="Remove from Wishlist" />
                     ) : (
                       <img src={require("../assets/images/wishlist-unfilled-icon.png")} alt="Add to Wishlist" />

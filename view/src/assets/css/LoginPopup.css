@@ -251,10 +251,12 @@
 
 /* Sign Up Link Styles */
 .login-popup__signup-link {
+  
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
   color: #3a2926;
+
 }
 
 .login-popup__signup-link button {

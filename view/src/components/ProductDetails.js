@@ -30,8 +30,8 @@ const ProductDetails = () => {
         });
 
         const data = await response.json();
-        console.log("Fetched product:", data.node);
-        setProduct(data.node); // ✅ Directly access the node object
+        console.log("Fetched product:", data.product);
+        setProduct(data.product); // ✅ Directly access the product object
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
