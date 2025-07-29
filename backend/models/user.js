@@ -18,9 +18,10 @@ const userSchema = new mongoose.Schema({
         default: null
     },
     cart: [{
-        productHandle: {
+        productHandle : {
             type: String,
             required: true
+
         },
         productId: {
             type: String,
@@ -37,9 +38,11 @@ const userSchema = new mongoose.Schema({
         }
     }],
     wishlist: [{
-         productHandle: {
+        productId: {
             type: String,
-            required: true
+            required: [true, 'Product handle is required for wishlist items'],
+            trim: true,
+            minlength: [1, 'Product handle cannot be empty']
         },
     }],
     token: {

@@ -213,6 +213,7 @@ router.post("/cart", authenticate.authenticateToken, async (req, res) => {
 router.post("/add-to-cart", authenticate.authenticateToken, async (req, res) => {
   try {
     const { productHandle, productId, variantId, quantity } = req.body;
+    console.log(productHandle)
     console.log("Adding item to cart for user:", req.user._id);
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -269,6 +270,18 @@ router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res)
   try {
     const { productHandle } = req.body;
     console.log("Adding item to wishlist for user:", req.user._id);
+    console.log("Product handle:", productHandle);
+    console.log("Request body:", req.body);
+    
+    // Validate productHandle
+    if (!productHandle || productHandle.trim() === '') {
+      console.log("Product handle is required and cannot be empty");
+      return res.status(400).json({ 
+        success: false, 
+        message: "Product handle is required and cannot be empty" 
+      });
+    }
+    
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
@@ -283,7 +296,7 @@ router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res)
     }
     
     // Add to wishlist only if it doesn't exist
-    user.wishlist.push({ productHandle: productHandle });
+    user.wishlist.push({ productId: productHandle });
     await user.save();
     console.log("Product added to user wishlist:", user.wishlist);
     res.status(200).json({ success: true, message: "Product added to wishlist", wishlist: user.wishlist });

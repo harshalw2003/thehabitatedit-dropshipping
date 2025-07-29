@@ -32,7 +32,7 @@ export async function fetchProductById(productHandle){
     });
 
     const data = await res.json();
-    return data.node;
+    return data.product;
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;
@@ -57,7 +57,7 @@ export async function createCart(productId, variantId, quantity = 1) {
   }
 }
 
-export async function addToCart(productId, variantId, quantity = 1) {
+export async function addToCart(productHandle, productId, variantId, quantity = 1) {
   try {
     const res = await fetch(`http://${ip}:8001/user/add-to-cart`, {
       method: "POST",
@@ -65,7 +65,7 @@ export async function addToCart(productId, variantId, quantity = 1) {
         "Content-Type": "application/json",
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },
-      body: JSON.stringify({ productId, variantId, quantity }),
+      body: JSON.stringify({ productHandle, productId, variantId, quantity }),
     });
 
     const data = await res.json();

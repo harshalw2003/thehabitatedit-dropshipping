@@ -66,7 +66,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
             const data = await response.json();
             if (data.success && data.wishlist) {
               // Extract just the product handles from the wishlist items
-              const wishlistHandles = data.wishlist.map(item => item.productHandle);
+              const wishlistHandles = data.wishlist.map(item => item.productId);
               setWishlist(wishlistHandles);
               // Still save to localStorage as a cache
               localStorage.setItem('wishlist', JSON.stringify(wishlistHandles));
@@ -136,6 +136,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
   // Function to handle adding to cart
   const cartHandler = async (product) => {
     try {
+      console.log(product.handle)
       const productHandle = product.handle;
       const productId = cleanProductId(product.id);
       const variantId = cleanVariantId(product.variants.edges[0].node.id);

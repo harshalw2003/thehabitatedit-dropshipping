@@ -24,7 +24,7 @@ const Cart = () => {
             const productDetails = await fetchProductById(item.productHandle);
             
             if (!productDetails) {
-              throw new Error(`Could not fetch details for product ${item.productId}`);
+              throw new Error(`Could not fetch details for product ${item.productHandle}`);
             }
             
             // Find the specific variant
@@ -33,7 +33,7 @@ const Cart = () => {
             )?.node;
             
             if (!variant) {
-              throw new Error(`Variant ${item.variantId} not found for product ${item.productId}`);
+              throw new Error(`Variant ${item.variantId} not found for product ${item.productHandle}`);
             }
             
             return {
