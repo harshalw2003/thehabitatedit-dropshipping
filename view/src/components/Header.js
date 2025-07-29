@@ -9,6 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   
   const desktopDropdownRef = useRef(null);
   const mobileDropdownRef = useRef(null);
@@ -74,6 +77,97 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  
+  // Function to fetch user data from the backend
+  const fetchUserData = async () => {
+    console.log('fetching user details')
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+      
+      const response = await fetch('http://localhost:8001/user/authenticate', {
+        method: 'GET',
+        headers: { 
+          'Authorization' : `Bearer ${token}`,
+          'credentials': 'include' // Include credentials for CORS requests
+        }
+      });
+      
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("Fetched user data:", userData.user);
+        setUserData(userData.user);
+      } else {
+        // If the request fails (e.g., token expired), log the user out
+        handleLogout();
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  // Check for logged-in user on component mount
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (isLoggedIn) {
+      setIsLoggedIn(true);
+      fetchUserData(); // Fetch user details from backend
+    }
+  }, []);
+  
+  // Handle successful login
+  const handleLoginSuccess = (loginSuccess) => {
+    if (loginSuccess) {
+      setIsLoggedIn(true);
+      fetchUserData(); // Fetch user details after login
+    }
+  };
+  
+  // Show logout confirmation
+  const showLogoutConfirmation = (e) => {
+    e.preventDefault();
+    // Close dropdowns
+    setIsDesktopDropdownOpen(false);
+    setIsMobileDropdownOpen(false);
+    // Show confirmation popup
+    setShowLogoutConfirm(true);
+  };
+  
+  // Cancel logout
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false);
+  };
+  
+  // Handle actual logout after confirmation
+  const handleLogout = async () => {
+    // Notify backend about logout
+    try {
+      const response = await fetch('http://localhost:8001/user/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('authToken');
+        console.log("Logged out successfully");
+      } else {
+        console.error("Failed to log out");
+      }
+    } catch(error) {
+      console.error('Error logging out:', error);
+    }
+
+    // Update state
+    setIsLoggedIn(false);
+    setUserData(null);
+    
+    // Close confirmation popup
+    setShowLogoutConfirm(false);
+  };
 
   return (
     <>
@@ -99,16 +193,32 @@ const Header = () => {
               </div>
               {isDesktopDropdownOpen && (
                 <div className="dropdown-menu">
-                  <a 
-                    href="#" 
-                    className="dropdown-item"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openLoginPopup();
-                    }}
-                  >
-                    LOGIN
-                  </a>
+                  {!isLoggedIn ? (
+                    <a 
+                      href="#" 
+                      className="dropdown-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openLoginPopup();
+                      }}
+                    >
+                      LOGIN
+                    </a>
+                  ) : (
+                    <>
+                      <div className="dropdown-user-info">
+                        Hello, {userData?.firstName || "User"}
+                        {!userData && <div className="loading-indicator">Loading...</div>}
+                      </div>
+                      <a 
+                        href="#" 
+                        className="dropdown-item"
+                        onClick={showLogoutConfirmation}
+                      >
+                        LOGOUT
+                      </a>
+                    </>
+                  )}
                   <a href="#" className="dropdown-item">YOUR ORDERS</a>
                 </div>
               )}
@@ -133,16 +243,32 @@ const Header = () => {
               </div>
               {isMobileDropdownOpen && (
                 <div className="mobile-dropdown-menu">
-                  <a 
-                    href="#" 
-                    className="mobile-dropdown-item"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openLoginPopup();
-                    }}
-                  >
-                    LOGIN
-                  </a>
+                  {!isLoggedIn ? (
+                    <a 
+                      href="#" 
+                      className="mobile-dropdown-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openLoginPopup();
+                      }}
+                    >
+                      LOGIN
+                    </a>
+                  ) : (
+                    <>
+                      <div className="mobile-dropdown-user-info">
+                        Hello, {userData?.firstName || "User"}
+                        {!userData && <div className="loading-indicator">Loading...</div>}
+                      </div>
+                      <a 
+                        href="#" 
+                        className="mobile-dropdown-item"
+                        onClick={showLogoutConfirmation}
+                      >
+                        LOGOUT
+                      </a>
+                    </>
+                  )}
                   <a href="#" className="mobile-dropdown-item">YOUR ORDERS</a>
                 </div>
               )}
@@ -200,7 +326,22 @@ const Header = () => {
         </div>
       </div>
 
-      <LoginPopup isOpen={isLoginPopupOpen} onClose={closeLoginPopup} />
+      {/* Login Popup */}
+      <LoginPopup isOpen={isLoginPopupOpen} onClose={closeLoginPopup} onLoginSuccess={handleLoginSuccess} />
+      
+      {/* Logout Confirmation Popup */}
+      {showLogoutConfirm && (
+        <div className="logout-confirmation-overlay">
+          <div className="logout-confirmation">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out?</p>
+            <div className="logout-confirmation__buttons">
+              <button className="cancel-btn" onClick={cancelLogout}>Cancel</button>
+              <button className="confirm-btn" onClick={handleLogout}>Yes, Log Out</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

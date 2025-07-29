@@ -22,7 +22,7 @@ router.post("/products", async (req, res) => {
                 }
               }
             }
-            variants(first: 1) {
+            variants(first: 5) {
               edges {
                 node {
                   id
@@ -61,6 +61,7 @@ router.post("/products", async (req, res) => {
 
   const data = await response.json();
   if (data) {
+    console.log("Products fetched successfully:", JSON.stringify(data));
     res.json(data);
   } else {
     res.json({

@@ -367,6 +367,24 @@ body, html {
     flex-direction: column;
 }
 
+.dropdown-user-info {
+    padding: 10px 15px;
+    color: #3a2926;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 5px;
+}
+
+.loading-indicator {
+    font-size: 12px;
+    color: #8a8a8a;
+    margin-top: 3px;
+    font-weight: normal;
+    font-style: italic;
+}
+
 .dropdown-item {
     padding: 8px 15px;
     color: #3a2926;
@@ -438,6 +456,16 @@ body, html {
     display: flex;
     flex-direction: column;
     margin-top: 5px; /* Add a small gap */
+}
+
+.mobile-dropdown-user-info {
+    padding: 8px 15px;
+    color: #3a2926;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 5px;
 }
 
 .mobile-dropdown-item {
@@ -528,4 +556,90 @@ body, html {
 .toggle-checkbox:hover+.hamburger .bar:nth-child(3) {
     transform: rotate(45deg) scale(0.7);
     transition-delay: 0.6s;
+}
+
+/* Logout Confirmation Popup Styles */
+.logout-confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.2s ease;
+}
+
+.logout-confirmation {
+    background: #fff;
+    width: 320px;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 24px;
+    text-align: center;
+    animation: scaleIn 0.3s ease;
+}
+
+.logout-confirmation h3 {
+    margin: 0 0 15px;
+    font-size: 18px;
+    color: #3a2926;
+}
+
+.logout-confirmation p {
+    margin: 0 0 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.logout-confirmation__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.logout-confirmation .cancel-btn {
+    padding: 10px 20px;
+    background: #f1f1f1;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.logout-confirmation .confirm-btn {
+    padding: 10px 20px;
+    background: #3a2926;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.logout-confirmation .cancel-btn:hover {
+    background: #e5e5e5;
+}
+
+.logout-confirmation .confirm-btn:hover {
+    background: #4a3936;
+}
+
+@keyframes scaleIn {
+    from { 
+        opacity: 0; 
+        transform: scale(0.9); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
 }
