@@ -93,8 +93,8 @@ export async function addToWishlist(productHandle) {
     
     // Update local storage with the new wishlist if provided
     if (data.success && data.wishlist) {
-      const wishlistIds = data.wishlist.map(item => item.productId);
-      localStorage.setItem('wishlist', JSON.stringify(wishlistIds));
+      const wishlistHandles = data.wishlist.map(item => item.productHandle);
+      localStorage.setItem('wishlist', JSON.stringify(wishlistHandles));
     }
     
     return data.success;
@@ -119,8 +119,8 @@ export async function removeFromWishlist(productHandle) {
     
     // Update local storage with the new wishlist if provided
     if (data.success && data.wishlist) {
-      const wishlistIds = data.wishlist.map(item => item.productId);
-      localStorage.setItem('wishlist', JSON.stringify(wishlistIds));
+      const wishlistHandles = data.wishlist.map(item => item.productHandle);
+      localStorage.setItem('wishlist', JSON.stringify(wishlistHandles));
     }
     
     return data.success;

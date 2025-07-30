@@ -66,7 +66,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
             const data = await response.json();
             if (data.success && data.wishlist) {
               // Extract just the product handles from the wishlist items
-              const wishlistHandles = data.wishlist.map(item => item.productId);
+              const wishlistHandles = data.wishlist.map(item => item.productHandle);
               setWishlist(wishlistHandles);
               // Still save to localStorage as a cache
               localStorage.setItem('wishlist', JSON.stringify(wishlistHandles));

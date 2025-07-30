@@ -91,10 +91,11 @@ router.post("/send-otp", async (req, res) => {
     //   //   body: `Your OTP is: ${otp}`
     // });
     // const message = await twilioClient.messages.create({
-    //   body: `${otp} is your OTP to login into T H E`,
+    //   body: `Your verification code to login in to T H E is ${otp}`,
     //   from: '+12513250217',
     //   to: `+91${phoneNumber}`
     // });
+    
     const userExists = await User.findOne({ phoneNumber: `+91${phoneNumber}` });
     console.log("User exists:", userExists);
     if (userExists) {
@@ -174,7 +175,6 @@ router.get('/authenticate', authenticate.authenticateToken, async (req, res) => 
   res.status(200).json({ success: true, user: req.user });
 });
 
-
 router.post("/logout", authenticate.authenticateToken , async (req, res) => {
 
   console.log("User logout API hit")
@@ -229,24 +229,6 @@ router.post("/add-to-cart", authenticate.authenticateToken, async (req, res) => 
   }
 });
 
-router.post("/remove-from-cart", authenticate.authenticateToken, async (req, res) => {
-  try {
-    const { productHandle, productId, variantId, quantity } = req.body;
-    console.log("Removing item from cart for user:", req.user._id);
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
-    user.cart = user.cart.filter(item => item.productId !== productId || item.variantId !== variantId || item.productHandle !== productHandle);
-    await user.save();
-    console.log("Updated user cart:", user.cart);
-    res.status(200).json({ success: true, cart: user.cart });
-  } catch (error) {
-    console.error("Error removing from cart:", error.message);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
 // Get user's wishlist
 router.get("/get-wishlist", authenticate.authenticateToken, async (req, res) => {
   try {
@@ -269,26 +251,37 @@ router.get("/get-wishlist", authenticate.authenticateToken, async (req, res) => 
 router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res) => {
   try {
     const { productHandle } = req.body;
+    console.log("=== ADD TO WISHLIST DEBUG ===");
     console.log("Adding item to wishlist for user:", req.user._id);
     console.log("Product handle:", productHandle);
+    console.log("Product handle type:", typeof productHandle);
+    console.log("Product handle length:", productHandle ? productHandle.length : 'undefined/null');
     console.log("Request body:", req.body);
+    console.log("Request headers:", req.headers);
     
     // Validate productHandle
     if (!productHandle || productHandle.trim() === '') {
-      console.log("Product handle is required and cannot be empty");
+      console.log("❌ Product handle validation failed");
       return res.status(400).json({ 
         success: false, 
         message: "Product handle is required and cannot be empty" 
       });
     }
     
+    console.log("✅ Product handle validation passed");
+    
     const user = await User.findById(req.user._id);
+    console.log("User found:", !!user);
+    console.log("User ID:", user ? user._id : 'null');
+    console.log("Current wishlist length:", user ? user.wishlist.length : 'null');
+    
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
     
     // Check if product already exists in wishlist
     const productExists = user.wishlist.some(item => item.productHandle === productHandle);
+    console.log("Product already exists in wishlist:", productExists);
     
     if (productExists) {
       console.log("Product already in wishlist");
@@ -296,12 +289,23 @@ router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res)
     }
     
     // Add to wishlist only if it doesn't exist
-    user.wishlist.push({ productId: productHandle });
+    console.log("About to push to wishlist:", { productHandle: productHandle });
+    user.wishlist.push({ productHandle: productHandle });
+    
+    console.log("Wishlist after push, before save:", user.wishlist);
+    console.log("About to save user...");
+    
     await user.save();
-    console.log("Product added to user wishlist:", user.wishlist);
+    
+    console.log("✅ User saved successfully");
+    console.log("Final wishlist:", user.wishlist);
+    console.log("=== END DEBUG ===");
+    
     res.status(200).json({ success: true, message: "Product added to wishlist", wishlist: user.wishlist });
   } catch (error) {
-    console.error("Error adding to wishlist:", error.message);
+    console.error("❌ Error adding to wishlist:", error.message);
+    console.error("Error stack:", error.stack);
+    console.error("Error details:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
