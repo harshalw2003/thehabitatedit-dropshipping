@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Hero from './hero';
 import ProductGrid from './ProductGrid';
-import Banner from './Banner';
+import Footer from './Footer';
 import FilterSidebar from './FilterSidebar';
 import FilterDropdown from './FilterDropdown';
 import SortBy from './SortBy';
@@ -77,7 +77,7 @@ const ProductsPage = ({ selectedCollection = null }) => {
             <div className="product-grid-container">
               <ProductGrid category={activeCategory} />
             </div>
-            <Banner />
+            <Footer />
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import "../assets/css/ProductGrid.css";
 import "../assets/css/LoadingAnimations.css"; // Import loading animations
 import { fetchProducts, addToWishlist, removeFromWishlist, addToCart } from "../api/shopify";
 import CartNotification from "./CartNotification";
+import LoginPopup from "./LoginPopup";
 
 
 export default function ProductGrid({ category = null, limit = null, sort = null }) {
@@ -16,6 +17,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
     message: '',
     product: null
   });
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -143,13 +145,14 @@ export default function ProductGrid({ category = null, limit = null, sort = null
       console.log("Adding to cart:", productHandle, variantId);
 
       // Add to cart API call
-      if (await addToCart(productHandle, productId, variantId, 1)) {
+      const result = await addToCart(productHandle, productId, variantId, 1);
+      
+      if (result.success) {
         // Item added successfully, show notification
         const productInfo = {
           title: product.title,
           image: product.images.edges[0]?.node.url,
           price: product.variants.edges[0].node.price.amount
-
         };
         
         // Show notification
@@ -170,6 +173,12 @@ export default function ProductGrid({ category = null, limit = null, sort = null
             });
           }, 100);
         }
+      } else if (result.status === 401) {
+        // User is not authenticated, show login popup
+        setShowLoginPopup(true);
+      } else {
+        // Other error
+        console.error("Failed to add to cart:", result.message);
       }
     } catch (error) {
       console.error("Error adding item to cart:", error);
@@ -227,6 +236,13 @@ export default function ProductGrid({ category = null, limit = null, sort = null
       console.error("Error updating wishlist:", error);
     }
   }
+
+  // Handle successful login
+  const handleLoginSuccess = () => {
+    setShowLoginPopup(false);
+    // Optionally refresh the page or update authentication state
+    window.location.reload();
+  };
   return (
   <section className="product-grid">
     {/* Cart Notification */}
@@ -339,6 +355,13 @@ export default function ProductGrid({ category = null, limit = null, sort = null
        
       </div>
     )}
+    
+    {/* Login Popup */}
+    <LoginPopup 
+      isOpen={showLoginPopup} 
+      onClose={() => setShowLoginPopup(false)}
+      onLoginSuccess={handleLoginSuccess}
+    />
   </section>
 );
 

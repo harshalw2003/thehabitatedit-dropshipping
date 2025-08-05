@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Header from './Header';
+import LoginPopup from './LoginPopup';
+import Footer from './Footer';
 import '../assets/css/ProductDetails.css';
 import '../assets/css/LoadingAnimations.css'; // Import loading animations
-import Banner from './Banner';
 import ProductGrid from './ProductGrid';
+import { addToCart as apiAddToCart } from '../api/shopify';
 const ip = "localhost"; // Define your IP address or endpoint here
 
 const ProductDetails = () => {
@@ -15,6 +17,7 @@ const ProductDetails = () => {
   // const [activeTab, setActiveTab] = useState('features');
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   // Scroll to top when component mounts or id changes
   useEffect(() => {
@@ -89,8 +92,45 @@ const ProductDetails = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
-  const addToCart = () => {
-    alert(`Added ${quantity} of ${product.title} to cart`);
+  // Helper functions to clean IDs
+  const cleanProductId = (id) => {
+    return id.split("/").pop(); // Clean the product ID
+  }
+  
+  const cleanVariantId = (id) => {
+    return id.split("/").pop(); // Clean the variant ID
+  }
+
+  const addToCart = async () => {
+    if (!product) return;
+    
+    try {
+      const productHandle = product.handle;
+      const productId = cleanProductId(product.id);
+      const variantId = cleanVariantId(product.variants.edges[0].node.id);
+
+      // Add to cart API call
+      const result = await apiAddToCart(productHandle, productId, variantId, quantity);
+      
+      if (result.success) {
+        alert(`Added ${quantity} of ${product.title} to cart`);
+      } else if (result.status === 401) {
+        // User is not authenticated, show login popup
+        setShowLoginPopup(true);
+      } else {
+        alert('Failed to add to cart. Please try again.');
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+      alert('An error occurred. Please try again.');
+    }
+  };
+
+  // Handle successful login
+  const handleLoginSuccess = () => {
+    setShowLoginPopup(false);
+    // Optionally refresh the page or update authentication state
+    window.location.reload();
   };
 
   const addToWishlist = () => {
@@ -260,8 +300,15 @@ const ProductDetails = () => {
         </div>
        
 
-        <Banner />
+        <Footer />
       </div>
+      
+      {/* Login Popup */}
+      <LoginPopup 
+        isOpen={showLoginPopup} 
+        onClose={() => setShowLoginPopup(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </div>
   );
 };

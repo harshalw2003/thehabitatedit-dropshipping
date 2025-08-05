@@ -69,8 +69,14 @@ export async function addToCart(productHandle, productId, variantId, quantity = 
     });
 
     const data = await res.json();
-    // console.log(data.message);
-    return data.success;
+    
+    // Return both success status and response data for better error handling
+    return {
+      success: data.success,
+      status: res.status,
+      message: data.message,
+      data: data
+    };
   } catch (error) {
     console.error("Error creating cart:", error);
     throw error;

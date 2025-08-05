@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
         }
     }],
     wishlist: [{
-        productId: {
+        productHandle: {
             type: String,
             required: [true, 'Product handle is required for wishlist items'],
             trim: true,

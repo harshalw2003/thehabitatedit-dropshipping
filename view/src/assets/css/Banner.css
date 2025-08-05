@@ -1,22 +1,38 @@
 /* Banner.css */
 .banner {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     background: #f5f2ef;
     border-radius: 10px;
-    margin: 32px;
-    padding: 32px;
+    margin: 0px 100px;
+    padding: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* border: 1px solid red; */
+  z-index: 100;
+
 }
 
 .banner__content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* border: 1px solid green; */
+    align-items: flex-start;
+    gap: 20px;
 }
 
-.banner__content span {
-    font-size: 20px;
-    font-weight: 600;
+.banner__content .banner__content__title {
+    font-size: 30px;
+    font-weight: 700;
     color: #3a2926;
+    /* border:1px solid  #ef771b; */
+    letter-spacing: 3px;
+    width: 50%;
+    text-align: left;
 }
+
+
 
 .banner__content p {
     font-size: 15px;
@@ -32,19 +48,23 @@
     border-radius: 2px;
     font-size: 15px;
     cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
+
 
 .banner__img  {
    margin-right: 20px;
-   /* border: 1px solid green; */
 }
 
 .banner__img .hero_info{
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 100%;
-    border: 1px solid blue;
+    height: 100%;;
     align-items: center;
     flex-direction: column;
     /* gap: -1rem; */

@@ -1,0 +1,199 @@
+/* Footer.css */
+.footer {
+  width: 100%;
+  margin-top: 60px;
+}
+
+/* Banner Section integrated into Footer */
+.footer__banner {
+  margin: 0 80px -100px 80px;
+  z-index: 100;
+  position: relative;
+}
+
+/* Make sure Banner blends well with footer */
+.footer__banner .banner {
+  margin: 0;
+  border-radius: 20px;
+  position: relative;
+  z-index: 10;
+
+}
+
+/* Main Footer */
+.footer__main {
+  background: #3a2926;
+  color: white;
+  position: relative;
+  z-index: 1;
+  /* border: 1px solid #fff; */
+
+}
+
+.footer__content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 120px;
+  padding: 110px 32px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+}
+
+.footer__section{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.footer__section h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: white;
+
+}
+
+.footer__section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: fit-content;
+}
+
+.footer__section li {
+  margin-bottom: 12px;
+}
+
+.footer__section a {
+  color: #d4c5bb;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.footer__section a:hover {
+  color: white;
+}
+
+/* Social Icons */
+.footer__social {
+  display: flex;
+  gap: 10px;
+  /* margin-top: 16px; */
+}
+
+.social-icon {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+}
+
+.social-icon img{
+
+    width: 35px;
+    aspect-ratio: 1;
+}
+
+.social-icon img:hover {
+  /* background: #5a4946; */
+  transform: translateY(-2px);
+}
+
+
+
+/* Footer Bottom */
+.footer__bottom {
+  background: #1a1311;
+  padding: 10px 32px;
+  text-align: center;
+}
+
+.footer__bottom p {
+  margin: 0;
+  font-size: 14px;
+  color: #8a7e77;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .footer__content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    padding: 120px 24px 32px;
+  }
+  
+  .footer__newsletter-content {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .newsletter-form {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer__banner {
+    margin: 0 16px -60px 16px;
+  }
+  
+  .footer__banner .banner {
+    border-radius: 16px;
+  }
+  
+  .footer__content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 100px 16px 24px;
+  }
+  
+  .footer__newsletter {
+    padding: 32px 16px;
+  }
+  
+  .footer__newsletter h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .newsletter-form {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .newsletter-form input {
+    width: 100%;
+  }
+  
+  .footer__bottom {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__banner {
+    margin: 0 8px -40px 8px;
+  }
+  
+  .footer__banner .banner {
+    border-radius: 12px;
+  }
+  
+  .footer__content {
+    padding: 80px 16px 24px;
+  }
+  
+  .footer__social {
+    justify-content: center;
+  }
+}

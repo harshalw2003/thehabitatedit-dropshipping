@@ -90,11 +90,11 @@ router.post("/send-otp", async (req, res) => {
     //   to: `whatsapp:+91${phoneNumber}`,
     //   //   body: `Your OTP is: ${otp}`
     // });
-    // const message = await twilioClient.messages.create({
-    //   body: `Your verification code to login in to T H E is ${otp}`,
-    //   from: '+12513250217',
-    //   to: `+91${phoneNumber}`
-    // });
+    const message = await twilioClient.messages.create({
+      body: `Your verification code to login in to T H E is ${otp}`,
+      from: '+12513250217',
+      to: `+91${phoneNumber}`
+    });
     
     const userExists = await User.findOne({ phoneNumber: `+91${phoneNumber}` });
     console.log("User exists:", userExists);
@@ -257,7 +257,7 @@ router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res)
     console.log("Product handle type:", typeof productHandle);
     console.log("Product handle length:", productHandle ? productHandle.length : 'undefined/null');
     console.log("Request body:", req.body);
-    console.log("Request headers:", req.headers);
+    // console.log("Request headers:", req.headers);
     
     // Validate productHandle
     if (!productHandle || productHandle.trim() === '') {

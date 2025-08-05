@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import LoginPopup from './LoginPopup';
+import Footer from './Footer';
 import '../assets/css/Cart.css';
 import { getCart, updateCartItemQuantity, removeFromCart, fetchProductById } from '../api/shopify';
 import '../assets/css/LoadingAnimations.css';
@@ -9,10 +11,30 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  
+  // Check if user is logged in
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const authStatus = localStorage.getItem('isLoggedIn') === 'true';
+      const authToken = localStorage.getItem('authToken');
+      setIsLoggedIn(authStatus && authToken);
+      setLoading(false);
+    };
+    
+    checkAuthStatus();
+  }, []);
   
   // Fetch cart data from backend
   useEffect(() => {
     const loadCart = async () => {
+      // Only load cart if user is logged in
+      if (!isLoggedIn) {
+        setLoading(false);
+        return;
+      }
+      
       try {
         setLoading(true);
         const cartData = await getCart();
@@ -61,7 +83,14 @@ const Cart = () => {
     };
     
     loadCart();
-  }, []);
+  }, [isLoggedIn]); // Add isLoggedIn as dependency
+
+  // Handle successful login
+  const handleLoginSuccess = () => {
+    setShowLoginPopup(false);
+    setIsLoggedIn(true);
+    // The cart will reload automatically due to the useEffect dependency
+  };
 
   // Calculate cart summary
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -114,11 +143,18 @@ const Cart = () => {
   return (
     <div className="cart-page">
       <Header />
-      
-      <div className="cart-container">
+      <div className="cart-main-layout">
         <h1 className="cart-title">YOUR BAG</h1>
-        
-        {loading && cartItems.length === 0 ? (
+        {!isLoggedIn ? (
+          <div className="cart-login-required">
+            <div className="login-prompt">
+              <h2>Login to access your cart</h2>
+              <p>Please log in to view and manage your shopping cart items.</p>
+              <button className="login-button" onClick={() => setShowLoginPopup(true)}>Login</button>
+              <Link to="/" className="continue-shopping">Continue Shopping</Link>
+            </div>
+          </div>
+        ) : loading && cartItems.length === 0 ? (
           <div className="cart-loading">
             <div className="loading-spinner">
               <div className="spinner-circle"></div>
@@ -128,9 +164,7 @@ const Cart = () => {
         ) : error ? (
           <div className="cart-error">
             <p>{error}</p>
-            <button onClick={() => window.location.reload()} className="retry-button">
-              Try Again
-            </button>
+            <button onClick={() => window.location.reload()} className="retry-button">Try Again</button>
           </div>
         ) : cartItems.length === 0 ? (
           <div className="cart-empty">
@@ -138,152 +172,81 @@ const Cart = () => {
             <Link to="/" className="continue-shopping">Continue Shopping</Link>
           </div>
         ) : (
-          <div className="cart-content">
-            {loading && cartItems.length > 0 && (
-              <div className="cart-loading-overlay">
-                <div className="loading-spinner">
-                  <div className="spinner-circle"></div>
-                  <div className="spinner-text">Updating cart...</div>
-                </div>
-              </div>
-            )}
-            <div className="cart-items">
-              <div className="cart-headers">
-                <div className="cart-header product-col">PRODUCT</div>
-                <div className="cart-header price-col">PRICE</div>
-                <div className="cart-header quantity-col">QUANTITY</div>
-                <div className="cart-header subtotal-col">SUBTOTAL</div>
-              </div>
-              
+          <div className="cart-layout">
+            <div className="cart-items-section">
               {cartItems.map(item => (
-                <div className="cart-item" key={`${item.id}-${item.variantId}`}>
-                  <div className="product-col">
-                    <div className="product-image">
-                      <Link to={`/product/${item.id}`}>
-                        <img src={item.image} alt={item.name} />
-                      </Link>
-                    </div>
-                    <div className="product-details">
-                      <h3 className="product-name">{item.name}</h3>
-                      <p className="product-category">{item.category}</p>
-                      {item.color && <p className="product-color">Color: {item.color}</p>}
-                      <button 
-                        className="remove-item" 
-                        onClick={() => removeItem(item.id, item.variantId)}
-                        disabled={loading}
-                      >
-                        {loading ? 'Removing...' : 'Remove'}
-                      </button>
-                    </div>
+                <div className="cart-item-row" key={`${item.id}-${item.variantId}`}>
+                  <div className="cart-item-img">
+                    <Link to={`/product/${item.id}`}>
+                      <img src={item.image} alt={item.name} />
+                    </Link>
                   </div>
-                  
-                  <div className="price-col">
-                    ₹{item.price.toFixed(2)}
-                  </div>
-                  
-                  <div className="quantity-col">
-                    <div className="quantity-selector">
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.variantId, item.quantity - 1)}
-                        disabled={loading || item.quantity <= 1}
-                      >-</button>
-                      <input 
-                        type="number" 
-                        value={item.quantity} 
-                        onChange={(e) => updateQuantity(item.id, item.variantId, parseInt(e.target.value) || 1)}
-                        min="1"
-                        disabled={loading}
-                      />
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
-                        disabled={loading}
-                      >+</button>
+                  <div className="cart-item-info">
+                    <div className="cart-item-header">
+                      <span className="cart-item-title">{item.name}</span>
+                      <button className="cart-item-remove" onClick={() => removeItem(item.id, item.variantId)} disabled={loading}>×</button>
+                    </div>
+                    <div className="cart-item-details">
+                      <span className="cart-item-category">{item.category}</span>
+                      {item.color && <span className="cart-item-color">{item.color}</span>}
+                      {/* Variant/Size selector can go here if needed */}
+                    </div>
+                    <div className="cart-item-qty-row">
+                      <span>QUANTITY</span>
+                      <button onClick={() => updateQuantity(item.id, item.variantId, item.quantity - 1)} disabled={loading || item.quantity <= 1}>-</button>
+                      <span className="cart-item-qty">{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)} disabled={loading}>+</button>
                     </div>
                   </div>
-                  
-                  <div className="subtotal-col">
-                    ₹{(item.price * item.quantity).toFixed(2)}
-                  </div>
+                  <div className="cart-item-price">₹{item.price.toFixed(2)}</div>
                 </div>
               ))}
             </div>
-            
-            <div className="cart-summary">
-              <h2>ORDER SUMMARY</h2>
-              
-              <div className="summary-row">
-                <span>Subtotal</span>
-                <span>₹{subtotal.toFixed(2)}</span>
-              </div>
-              
-              <div className="summary-row">
-                <span>Shipping</span>
-                <span>{shipping === 0 ? 'Free' : `₹${shipping.toFixed(2)}`}</span>
-              </div>
-              
-              <div className="summary-row">
-                <span>Estimated Tax</span>
-                <span>₹{tax.toFixed(2)}</span>
-              </div>
-              
-              <div className="summary-total">
-                <span>Total</span>
-                <span>₹{total.toFixed(2)}</span>
-              </div>
-              
-              <div className="promo-code">
-                <input type="text" placeholder="Promo Code" />
-                <button>Apply</button>
-              </div>
-              
-              <button className="checkout-button">PROCEED TO CHECKOUT</button>
-              
-              <Link to="/" className="continue-shopping">Continue Shopping</Link>
-              
-              <div className="payment-methods">
-                <span>We Accept</span>
-                <div className="payment-icons">
-                  <span className="payment-icon">Visa</span>
-                  <span className="payment-icon">MC</span>
-                  <span className="payment-icon">Amex</span>
-                  <span className="payment-icon">PayPal</span>
+            <div className="cart-summary-section">
+              <div className="cart-summary-list">
+                {cartItems.map(item => (
+                  <div className="cart-summary-row" key={item.id + item.variantId}>
+                    <span>{item.name}</span>
+                    <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                ))}
+                <div className="cart-summary-row">
+                  <span>Sales Tax</span>
+                  <span>Included</span>
+                </div>
+                <div className="cart-summary-total">
+                  <span>Total</span>
+                  <span>₹{total.toFixed(2)}</span>
                 </div>
               </div>
-
-              <div className="secure-checkout">
-                <div className="secure-icon">🔒</div>
-                <span>Secure Checkout</span>
-              </div>
+              <button className="cart-checkout-btn">PROCEED TO CHECKOUT</button>
             </div>
           </div>
         )}
-        
-        <div className="cart-features">
-          <div className="feature">
-            <div className="feature-icon">✓</div>
-            <div className="feature-content">
-              <h4>Quality Guaranteed</h4>
-              <p>All products are carefully selected for quality and durability</p>
-            </div>
-          </div>
-          <div className="feature">
-            <div className="feature-icon">🚚</div>
-            <div className="feature-content">
-              <h4>Fast Shipping</h4>
-              <p>Orders over £50 qualify for free shipping</p>
-            </div>
-          </div>
-          <div className="feature">
-            <div className="feature-icon">↩️</div>
-            <div className="feature-content">
-              <h4>Easy Returns</h4>
-              <p>30-day hassle-free return policy</p>
-            </div>
+        {/* Recommended Products Section */}
+        <div className="cart-recommended-section">
+          <h2 className="cart-recommended-title">RECOMMENDED PRODUCT</h2>
+          <div className="cart-recommended-list">
+            {/* Example recommended products, replace with real data if available */}
+            {cartItems.slice(0, 4).map(item => (
+              <div className="cart-recommended-item" key={item.id + '-rec'}>
+                <img src={item.image} alt={item.name} />
+                <div className="cart-recommended-name">{item.name}</div>
+                <div className="cart-recommended-price">₹{item.price.toFixed(2)}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+      <Footer />
+      {/* Login Popup */}
+      <LoginPopup 
+        isOpen={showLoginPopup} 
+        onClose={() => setShowLoginPopup(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </div>
   );
-};
+}
 
-export default Cart;
+  export default Cart;

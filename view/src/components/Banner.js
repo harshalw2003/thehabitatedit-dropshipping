@@ -2,13 +2,14 @@
 import React from 'react';
 import '../assets/css/Banner.css';
 import '../assets/css/Hero.css';
+import { Link } from 'react-router-dom';
 
 const Banner = () => (
   <div className="banner">
     <div className="banner__content">
-      <span>CAPTURE PRECISION, ANYTIME, ANYWHERE.</span>
+      <span className='banner__content__title'>ESSENTIALS THAT INSPIRE <br/> PRICES THAT AMAZE</span>
       <p>Get fast, precise scans anywhere with our advanced Imaging Laser Scanner.</p>
-      <button>EXPLORE</button>
+      <Link to="/products"><button>EXPLORE PRODUCTS  <span className="material-symbols-outlined">arrow_right_alt</span></button></Link>
     </div>
     <div className="banner__img">
       {/* <img src={require('../assets/images/scanner.png')} alt="Scanner" /> */}
