@@ -3,14 +3,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@0,400;0,700;1,400;1,700&family=Major+Mono+Display&display=swap');
 
 /* Make sure dropdowns are visible even if parent containers have overflow:hidden */
-body, html {
+body,
+html {
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 /* Ensure all containers allow for dropdowns to be visible outside their bounds */
-.header, 
-.header__main, 
+.header,
+.header__main,
 .mobile-header,
 .mobile_header__main,
 .mobile-menu-actions,
@@ -22,6 +23,8 @@ body, html {
 .header {
     background: #fff;
     border-bottom: 1px solid #e5e5e5;
+    font-family: "IBM Plex Mono", monospace;
+
 }
 
 .header__topbar {
@@ -61,7 +64,7 @@ body, html {
     font-weight: 500;
 }
 
-.header__actions{
+.header__actions {
     display: flex;
     /* gap: 8px; */
     /* border: 1px solid red; */
@@ -115,8 +118,10 @@ body, html {
     border-bottom: 1px solid #f1f1f1;
     width: 100%;
     box-sizing: border-box;
-    overflow: visible; /* Changed from overflow-x: hidden to allow dropdowns to be visible */
-    position: relative; /* Ensure proper positioning context for child elements */
+    overflow: visible;
+    /* Changed from overflow-x: hidden to allow dropdowns to be visible */
+    position: relative;
+    /* Ensure proper positioning context for child elements */
 }
 
 .mobile-header__logo {
@@ -362,7 +367,8 @@ body, html {
     border-radius: 4px;
     padding: 10px 0;
     min-width: 150px;
-    z-index: 1500; /* Higher z-index to appear above other elements */
+    z-index: 1500;
+    /* Higher z-index to appear above other elements */
     display: flex;
     flex-direction: column;
 }
@@ -443,8 +449,10 @@ body, html {
 }
 
 .mobile-dropdown-menu {
-    position: absolute; /* Changed back to absolute for correct positioning relative to the icon */
-    top: 100%; /* Position right below the icon */
+    position: absolute;
+    /* Changed back to absolute for correct positioning relative to the icon */
+    top: 100%;
+    /* Position right below the icon */
     right: 0;
     background: #fff;
     border: 1px solid #e5e5e5;
@@ -452,10 +460,12 @@ body, html {
     border-radius: 4px;
     padding: 8px 0;
     min-width: 140px;
-    z-index: 1500; /* Higher z-index to appear above other elements */
+    z-index: 1500;
+    /* Higher z-index to appear above other elements */
     display: flex;
     flex-direction: column;
-    margin-top: 5px; /* Add a small gap */
+    margin-top: 5px;
+    /* Add a small gap */
 }
 
 .mobile-dropdown-user-info {
@@ -499,7 +509,7 @@ body, html {
     .mobile-header {
         display: flex;
     }
-    
+
 
 }
 
@@ -634,12 +644,13 @@ body, html {
 }
 
 @keyframes scaleIn {
-    from { 
-        opacity: 0; 
-        transform: scale(0.9); 
+    from {
+        opacity: 0;
+        transform: scale(0.9);
     }
-    to { 
-        opacity: 1; 
-        transform: scale(1); 
+
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }

@@ -1,8 +1,5 @@
 /* BestSellers.css */
-.bestsellers-section {
-  
- 
-  }
+
 
 .bestsellers-container {
 
@@ -35,7 +32,7 @@
 
 .bestsellers-grid {
   /* Uses the existing ProductGrid styling */
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 /* Browse All Products button */
@@ -145,10 +142,9 @@
   .bestsellers-grid .product-grid__item {
  width: 70vw;
  background: #f5f2ef;
- min-height: 40vh;
- 
-  
-  
+ height: 30vh; 
+
+
 }
 
  .bestsellers-grid  .product-grid__img{
@@ -160,7 +156,7 @@
    .bestsellers-grid  .product-grid__img img{
 
   width: 150px;
-  height: 130px;
+  height: 150px;
    }
 
     .bestsellers-grid .product-grid__name_price {
@@ -181,7 +177,8 @@
   }
    .bestsellers-grid .product-grid__name{
 
-    font-size: 0.71rem;
+    font-size: 0.81rem;
+    padding: 0px 5px;
   }
 
   .bestsellers-grid .product-grid__price{
@@ -192,6 +189,7 @@
   /* Add styles for the arrow icon here */
   display: block;
   font-size: 15px;
+  padding: 5px;
 
 }
 

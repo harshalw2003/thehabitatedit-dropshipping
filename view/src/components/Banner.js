@@ -8,8 +8,9 @@ const Banner = () => (
   <div className="banner">
     <div className="banner__content">
       <span className='banner__content__title'>ESSENTIALS THAT INSPIRE <br/> PRICES THAT AMAZE</span>
-      <p>Get fast, precise scans anywhere with our advanced Imaging Laser Scanner.</p>
-      <Link to="/products"><button>EXPLORE PRODUCTS  <span className="material-symbols-outlined">arrow_right_alt</span></button></Link>
+      <p>From self-care to smart tech,
+we bring comfort, style, and innovation to your everyday life</p>
+      <Link to="/products" className='explore-btn'><button>EXPLORE PRODUCTS  <span className="material-symbols-outlined">arrow_right_alt</span></button></Link>
     </div>
     <div className="banner__img">
       {/* <img src={require('../assets/images/scanner.png')} alt="Scanner" /> */}

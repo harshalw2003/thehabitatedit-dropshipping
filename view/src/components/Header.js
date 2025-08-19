@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "../assets/css/Header.css";
 import LoginPopup from "./LoginPopup";
 import { Link } from "react-router-dom";
+import ip from '../ip.js';
 
 const Header = () => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
@@ -85,7 +86,7 @@ const Header = () => {
       const token = localStorage.getItem('authToken');
       if (!token) return;
       
-      const response = await fetch('http://localhost:8001/user/authenticate', {
+      const response = await fetch(`http://${ip}:8001/user/authenticate`, {
         method: 'GET',
         headers: { 
           'Authorization' : `Bearer ${token}`,
@@ -142,7 +143,7 @@ const Header = () => {
   const handleLogout = async () => {
     // Notify backend about logout
     try {
-      const response = await fetch('http://localhost:8001/user/logout', {
+      const response = await fetch(`http://${ip}:8001/user/logout`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -181,9 +182,8 @@ const Header = () => {
               <a href="#">HOME</a>
             </Link>
             <Link to="/products" ><a href="#">PRODUCTS</a> </Link>
-            <a href="#">ABOUT US</a>
+           <> <Link to="/about"><a href="#">ABOUT US</a></Link> </>
             <a href="#">CONTACT</a>
-            <a href="#">HOME DECOR</a>
             
           </nav>
           <div className="header__actions">
@@ -220,6 +220,7 @@ const Header = () => {
                     </>
                   )}
                   <a href="#" className="dropdown-item">YOUR ORDERS</a>
+                  <a href="#" className="dropdown-item">YOUR WISHLIST</a>
                 </div>
               )}
             </div>
@@ -237,41 +238,10 @@ const Header = () => {
 
         <div className="mobile_header__main">
           <div className="mobile-menu-actions">
-            <div className="mobile-user-dropdown" ref={mobileDropdownRef}>
-              <div className="mobile-user-icon-wrapper" onClick={toggleMobileDropdown}>
+            <div className="mobile-user-wrapper">
+              <div className="mobile-user-icon-wrapper" onClick={!isLoggedIn ? openLoginPopup : showLogoutConfirmation}>
                 <img src={require("../assets/images/user-icon.png")} alt="User" className="mobile-user-icon" />
               </div>
-              {isMobileDropdownOpen && (
-                <div className="mobile-dropdown-menu">
-                  {!isLoggedIn ? (
-                    <a 
-                      href="#" 
-                      className="mobile-dropdown-item"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openLoginPopup();
-                      }}
-                    >
-                      LOGIN
-                    </a>
-                  ) : (
-                    <>
-                      <div className="mobile-dropdown-user-info">
-                        Hello, {userData?.firstName || "User"}
-                        {!userData && <div className="loading-indicator">Loading...</div>}
-                      </div>
-                      <a 
-                        href="#" 
-                        className="mobile-dropdown-item"
-                        onClick={showLogoutConfirmation}
-                      >
-                        LOGOUT
-                      </a>
-                    </>
-                  )}
-                  <a href="#" className="mobile-dropdown-item">YOUR ORDERS</a>
-                </div>
-              )}
             </div>
             <Link to="/cart" className="mobile-action-link">
               <img src={require("../assets/images/shopping-cart.png")} alt="Cart" />
@@ -306,21 +276,22 @@ const Header = () => {
             <Link to="/" className="mobile-nav-link" onClick={toggleMobileMenu}>
               HOME
             </Link>
-            <a href="#" className="mobile-nav-link">
-              TECH & GADGETS
-            </a>
-            <a href="#" className="mobile-nav-link">
-              SELF CARE
-            </a>
-            <a href="#" className="mobile-nav-link">
-              HOME DECOR
-            </a>
-            <a href="#" className="mobile-nav-link">
-              AUTO CARE
-            </a>
-            <a href="#" className="mobile-nav-link">
-              OTHERS
-            </a>
+            <Link to="/products" className="mobile-nav-link" onClick={toggleMobileMenu}>
+              PRODUCTS
+            </Link>
+            <Link to="/about" className="mobile-nav-link" onClick={toggleMobileMenu}>
+              ABOUT US
+
+            </Link>
+            <Link to="/contact" className="mobile-nav-link" onClick={toggleMobileMenu}>
+              CONTACT
+            </Link>
+            <Link to="/orders" className="mobile-nav-link" onClick={toggleMobileMenu}>
+              YOUR ORDERS
+            </Link>
+            <Link to="/wishlist" className="mobile-nav-link" onClick={toggleMobileMenu}>
+              YOUR WISHLIST
+            </Link>
           </nav>
           
         </div>

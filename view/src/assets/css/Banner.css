@@ -40,7 +40,7 @@
     margin: 10px 0;
 }
 
-.banner__content button {
+.banner__content .explore-btn button {
     background: #3a2926;
     color: #fff;
     border: none;
@@ -52,10 +52,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
 }
+.explore-btn{
 
-
-
+    text-decoration: none;
+}
 .banner__img  {
    margin-right: 20px;
 }

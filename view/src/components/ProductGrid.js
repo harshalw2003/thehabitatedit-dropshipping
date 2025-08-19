@@ -5,13 +5,19 @@ import "../assets/css/LoadingAnimations.css"; // Import loading animations
 import { fetchProducts, addToWishlist, removeFromWishlist, addToCart } from "../api/shopify";
 import CartNotification from "./CartNotification";
 import LoginPopup from "./LoginPopup";
+import ip from '../ip.js';
 
 
-export default function ProductGrid({ category = null, limit = null, sort = null }) {
+export default function ProductGrid({ category = null, limit = null, sort = null, onLoadMore }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false); // State for controlling fade-in animation
   const [wishlist, setWishlist] = useState([]); // State to track wishlist items
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [allProducts, setAllProducts] = useState([]); // Store all fetched products
+  const productsPerPage = 8; // Show 2 rows initially (4 products per row)
   const [notification, setNotification] = useState({
     visible: false,
     message: '',
@@ -36,12 +42,25 @@ export default function ProductGrid({ category = null, limit = null, sort = null
     fetchProducts(queryParams)
       .then(data => {
         // Apply limit if provided
-        let filteredData = data;
-        if (limit && limit > 0 && data.length > limit) {
-          filteredData = data.slice(0, limit);
+        console.log("Fetched products:", data);
+        
+        // Extract products array from the API response
+        const productsData = data?.data?.products?.edges || [];
+        console.log("Processed products array:", productsData);
+        
+        // Store all products in state
+        setAllProducts(productsData);
+        
+        if (limit && limit > 0) {
+          console.log("Applying limit:", limit);
+          setProducts(productsData.slice(0, limit));
+          setHasMore(false);
+        } else {
+          // Show only first page of products initially
+          setProducts(productsData.slice(0, productsPerPage));
+          setHasMore(productsData.length > productsPerPage);
         }
         
-        setProducts(filteredData);
         setLoading(false);
         // Set a small delay before triggering fade in animation
         setTimeout(() => setFadeIn(true), 100);
@@ -50,7 +69,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
         console.error("Error fetching products:", error);
         setLoading(false);
       });
-  }, [category, limit, sort]);
+  }, [category, limit, sort, page]);
   
   // Load wishlist from backend when user is authenticated
   useEffect(() => {
@@ -58,7 +77,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
       const authToken = localStorage.getItem('authToken');
       if (authToken) {
         try {
-          const response = await fetch(`http://localhost:8001/user/get-wishlist`, {
+          const response = await fetch(`http://${ip}:8001/user/get-wishlist`, {
             headers: {
               'Authorization': `Bearer ${authToken}`
             }
@@ -121,8 +140,9 @@ export default function ProductGrid({ category = null, limit = null, sort = null
 
 }
 
-  const productsArray = products?.data?.products?.edges || [];
-  console.log("Products array", productsArray)
+  // No need to check if it's an array since we're handling that in the fetch
+  const productsArray = products;
+  console.log("Products array for rendering:", productsArray);
 
   const cleanProductId = (id) => {
     const productId = id.split("/").pop(); // "9559713710320"
@@ -137,6 +157,23 @@ export default function ProductGrid({ category = null, limit = null, sort = null
   
   // Function to handle adding to cart
   const cartHandler = async (product) => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+      // Show notification first
+      setNotification({
+        visible: true,
+        message: 'Please login to add items to cart',
+        product: null,
+        type: 'login',
+        onActionClick: () => {
+          setShowLoginPopup(true);
+          setNotification(prev => ({ ...prev, visible: false }));
+        }
+      });
+      return;
+    }
+
     try {
       console.log(product.handle)
       const productHandle = product.handle;
@@ -190,6 +227,23 @@ export default function ProductGrid({ category = null, limit = null, sort = null
     setNotification(prev => ({ ...prev, visible: false }));
   };  // Function to toggle wishlist items
   const toggleWishlist = async (product) => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+      // Show notification first
+      setNotification({
+        visible: true,
+        message: 'Please login to add items to wishlist',
+        product: null,
+        type: 'login',
+        onActionClick: () => {
+          setShowLoginPopup(true);
+          setNotification(prev => ({ ...prev, visible: false }));
+        }
+      });
+      return;
+    }
+
     const productHandle = product.handle;
 
     try {
@@ -251,6 +305,8 @@ export default function ProductGrid({ category = null, limit = null, sort = null
       isVisible={notification.visible}
       onClose={closeNotification}
       product={notification.product}
+      type={notification.type}
+      onActionClick={notification.onActionClick}
     />
     
     {/* <div className="product-grid__title">
@@ -362,6 +418,33 @@ export default function ProductGrid({ category = null, limit = null, sort = null
       onClose={() => setShowLoginPopup(false)}
       onLoginSuccess={handleLoginSuccess}
     />
+    {!limit && hasMore && (
+      <div className="load-more-container">
+        <button 
+          className={`load-more-button ${isLoadingMore ? 'loading' : ''}`} 
+          onClick={() => {
+            setIsLoadingMore(true);
+            const nextPage = page + 1;
+            setPage(nextPage);
+            
+            // Load more products from the cached data
+            setProducts(prev => {
+              const start = (nextPage - 1) * productsPerPage;
+              const end = nextPage * productsPerPage;
+              const nextBatch = allProducts.slice(start, end);
+              return [...prev, ...nextBatch];
+            });
+
+            // Show loading state briefly for smooth transition
+            setTimeout(() => {
+              setIsLoadingMore(false);
+            }, 500);
+          }}
+        >
+          {isLoadingMore ? 'Loading...' : 'Load More'}
+        </button>
+      </div>
+    )}
   </section>
 );
 

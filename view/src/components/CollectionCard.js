@@ -15,7 +15,7 @@ const CollectionCard = ({ collection }) => {
     <div className="collection-card" onClick={handleClick}>
       <div className="collection-card__image-container">
         <img 
-          src={collection.image || require('../assets/images/vera-cup.png')} 
+          src={collection.image || require('../assets/images/tech-and-gadgets.jpg')} 
           alt={collection.title} 
           className="collection-card__image" 
         />

@@ -9,6 +9,7 @@ import FilterDropdown from './FilterDropdown';
 import SortBy from './SortBy';
 import CategoryButtons from './CategoryButtons';
 import '../assets/css/ProductsPage.css';
+import BestSellers from './BestSellers';
 
 const ProductsPage = ({ selectedCollection = null }) => {
   // State for mobile filter
@@ -77,9 +78,13 @@ const ProductsPage = ({ selectedCollection = null }) => {
             <div className="product-grid-container">
               <ProductGrid category={activeCategory} />
             </div>
+        {/* <BestSellers /> */}
+
             <Footer />
           </div>
         </div>
+
+
       </div>
     </div> 
   );

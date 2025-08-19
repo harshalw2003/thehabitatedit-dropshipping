@@ -1,0 +1,252 @@
+/* styles.css */
+
+
+.about-page {
+  background-color: #f5f2ef;
+  min-height: 100vh;
+}
+
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Hero Section */
+.about-hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 60px;
+}
+
+.about-hero h1 {
+  font-size: 48px;
+  color: #3a2926;
+  margin-bottom: 20px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  color: #8a7e77;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Sections */
+.about-section {
+  margin-bottom: 80px;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.about-section h2 {
+  font-size: 32px;
+  color: #3a2926;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Mission Section */
+.mission-section .section-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mission-section p {
+  font-size: 18px;
+  color: #8a7e77;
+  line-height: 1.8;
+}
+
+/* Values Section */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.value-card {
+  padding: 30px;
+  background: #f5f2ef;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-5px);
+}
+
+.value-icon {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.value-card h3 {
+  font-size: 20px;
+  color: #3a2926;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.value-card p {
+  color: #8a7e77;
+  line-height: 1.6;
+}
+
+/* Team Section */
+.team-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.team-content p {
+  font-size: 18px;
+  color: #8a7e77;
+  line-height: 1.8;
+}
+
+/* Quote Section */
+.quote-section {
+  text-align: center;
+  padding: 60px 40px;
+  background: #3a2926;
+}
+
+.quote-section blockquote {
+  font-size: 24px;
+  color: white;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  font-style: italic;
+}
+
+.quote-author {
+  color: #f5f2ef;
+  font-size: 16px;
+}
+
+/* Join Section */
+.join-section {
+  text-align: center;
+}
+
+.join-section p {
+  color: #8a7e77;
+  font-size: 18px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.newsletter-box {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
+
+.newsletter-box input {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #e0d9d5;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.newsletter-box button {
+  padding: 15px 30px;
+  background: #3a2926;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.newsletter-box button:hover {
+  background: #4a3936;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+ 
+  .about-hero {
+    padding: 60px 20px;
+  }
+
+  .about-hero h1 {
+    font-size: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+  }
+
+  .about-section {
+    padding: 30px 20px;
+    margin-bottom: 40px;
+  }
+
+  .about-section h2 {
+    font-size: 28px;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .quote-section blockquote {
+    font-size: 20px;
+  }
+
+  .newsletter-box {
+    flex-direction: column;
+  }
+
+  .newsletter-box button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero h1 {
+    font-size: 32px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .about-section h2 {
+    font-size: 24px;
+  }
+
+  .value-card {
+    padding: 20px;
+  }
+
+  .quote-section {
+    padding: 40px 20px;
+  }
+
+  .quote-section blockquote {
+    font-size: 18px;
+  }
+}

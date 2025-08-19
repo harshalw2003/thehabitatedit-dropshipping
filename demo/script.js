@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded",async  () => {
 
 async function fetchProducts(){
 
-   fetch("http://localhost:8001/shopify/products/", {
+   fetch(`http://${window.ip}:8001/shopify/products/`, {
     method: "POST",
   })
     .then((res) => res.json())
@@ -57,7 +57,7 @@ async function fetchProducts(){
 }
 
 async function createCart(merchandiseId, quantity = 1) {
-  const res = await fetch("http://localhost:8001/shopify/create-cart", {
+  const res = await fetch(`http://${window.ip}:8001/shopify/create-cart`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,22 +1,23 @@
 .collection-card {
   position: relative;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 300px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  height: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .collection-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .collection-card__image-container {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .collection-card__image {
@@ -30,7 +31,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
   padding: 20px;
   box-sizing: border-box;
   color: white;
@@ -77,46 +78,62 @@
 /* Collections grid layout */
 .collections-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  padding: 20px 0;
-  margin: 0 auto;
-  max-width: 1200px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  margin: 20px 10px;
+
 }
 
 .collections-section {
+
   padding: 30px;
   background-color: #faf9f7;
+  width: 100vw;
+  box-sizing: border-box;
+
 }
 
-.collections-section h2 {
-  text-align: center;
-  margin-bottom: 30px;
+.collections-section h4 {
+  text-align: left;
   font-size: 28px;
   color: #3a2926;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 10px 10px;
+
 }
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
   .collections-grid {
     grid-template-columns: 1fr;
-    padding: 15px;
+    padding:  10px 15px ;
+    margin: 0px 10px ;
   }
-  
+
   .collection-card {
-    height: 220px;
+    height: 300px;
   }
-  
+
   .collection-card__title {
     font-size: 18px;
   }
-  
+
   .collections-section {
-    padding: 20px 15px;
+    padding: 20px 5px ;
+    gap: 0px;
+    width: 100vw;
+    box-sizing: border-box;
   }
-  
-  .collections-section h2 {
+
+  .collections-section h4 {
     font-size: 22px;
-    margin-bottom: 20px;
+    padding: 0 25px ;
+  }
+  .button-arrow {
+
+    background-color: transparent;
   }
 }

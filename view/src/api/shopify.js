@@ -1,8 +1,9 @@
-const ip = "localhost"
-
+import ip from '../ip.js';
 
 export async function fetchProducts(queryParams = '') {
   const endpoint = `http://${ip}:8001/shopify/products/${queryParams}`;
+  console.log('Fetching products from:', endpoint);
+  console.log('IP being used:', ip);
 
  try{
    const res = await fetch(endpoint, {
@@ -10,7 +11,7 @@ export async function fetchProducts(queryParams = '') {
   });
 
   const data = await res.json();
-  console.log("Data from Api Call",data)
+  console.log("Products fetched from Api Call",data)
   if(data){
     return data;
   }else{
@@ -18,7 +19,7 @@ export async function fetchProducts(queryParams = '') {
   }
 
  }catch(err){
-  console.log(err.message);
+  console.log("Error fetching products:", err.message);
   return [];
  }
 };
@@ -95,7 +96,7 @@ export async function addToWishlist(productHandle) {
     });
 
     const data = await res.json();
-    console.log(data.message);
+    // console.log(data.message);
     
     // Update local storage with the new wishlist if provided
     if (data.success && data.wishlist) {

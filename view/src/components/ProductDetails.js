@@ -7,7 +7,7 @@ import '../assets/css/ProductDetails.css';
 import '../assets/css/LoadingAnimations.css'; // Import loading animations
 import ProductGrid from './ProductGrid';
 import { addToCart as apiAddToCart } from '../api/shopify';
-const ip = "localhost"; // Define your IP address or endpoint here
+import ip from '../ip.js';
 
 const ProductDetails = () => {
   const { id } = useParams();

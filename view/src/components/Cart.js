@@ -122,6 +122,25 @@ const Cart = () => {
     }
   };
 
+    function trimProductTitle(title, maxWords = 5, maxChars = 50) {
+  const words = title.split(" ");
+
+  // If it's already short, return as-is
+  if (title.length <= maxChars && words.length <= maxWords) return title;
+
+  // Remove filler/low-value words (optional enhancement)
+  const skipWords = ["with", "for", "and", "the", "of"];
+  const filtered = words.filter(word => !skipWords.includes(word.toLowerCase()));
+
+  // Pick first few important words
+  const trimmed = filtered.slice(0, maxWords).join(" ");
+
+  return trimmed.length > maxChars
+    ? trimmed.slice(0, maxChars).trim()
+    : trimmed;
+
+}
+
   // Remove item from cart
   const removeItem = async (id, variantId) => {
     try {
@@ -187,9 +206,7 @@ const Cart = () => {
                       <button className="cart-item-remove" onClick={() => removeItem(item.id, item.variantId)} disabled={loading}>×</button>
                     </div>
                     <div className="cart-item-details">
-                      <span className="cart-item-category">{item.category}</span>
-                      {item.color && <span className="cart-item-color">{item.color}</span>}
-                      {/* Variant/Size selector can go here if needed */}
+                      <span className="cart-item-category">₹{item.price.toFixed(2)}</span>
                     </div>
                     <div className="cart-item-qty-row">
                       <span>QUANTITY</span>
@@ -198,7 +215,7 @@ const Cart = () => {
                       <button onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)} disabled={loading}>+</button>
                     </div>
                   </div>
-                  <div className="cart-item-price">₹{item.price.toFixed(2)}</div>
+                  <div className="cart-item-price"></div>
                 </div>
               ))}
             </div>
@@ -206,7 +223,7 @@ const Cart = () => {
               <div className="cart-summary-list">
                 {cartItems.map(item => (
                   <div className="cart-summary-row" key={item.id + item.variantId}>
-                    <span>{item.name}</span>
+                    <span className="cart-summary-title">{trimProductTitle(item.name)}</span>
                     <span>₹{(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}

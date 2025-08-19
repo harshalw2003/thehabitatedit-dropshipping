@@ -2,7 +2,7 @@ import React, { useEffect, useState, forwardRef, useImperativeHandle } from "rea
 import "../assets/css/FilterSidebar.css";
 import "../assets/css/FilterOptions.css";
 import "../assets/css/LoadingAnimations.css"; // Import loading animations
-const ip = "localhost";
+import ip from '../ip.js';
 
 const FilterSidebar = forwardRef((props, ref) => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);

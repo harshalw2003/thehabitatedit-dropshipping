@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../assets/css/LoginPopup.css';
-const ip = "localhost"
+import ip from '../ip.js';
 
 const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [firstName, setFirstName] = useState('');
