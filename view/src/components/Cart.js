@@ -6,6 +6,8 @@ import Footer from './Footer';
 import '../assets/css/Cart.css';
 import { getCart, updateCartItemQuantity, removeFromCart, fetchProductById } from '../api/shopify';
 import '../assets/css/LoadingAnimations.css';
+import ip from '../ip.js';
+
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -95,7 +97,8 @@ const Cart = () => {
   // Calculate cart summary
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shipping = subtotal >= 50 ? 0 : 10;
-  const tax = subtotal * 0.1; // Assuming 10% tax
+  const tax = subtotal * 0; // Assuming 0% tax
+
   const total = subtotal + shipping + tax;
 
   // Update item quantity
@@ -156,6 +159,28 @@ const Cart = () => {
       setError('Failed to remove item. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const createCheckout = async (variantId) => {
+    try {
+      const response = await fetch(`http://${ip}:8001/shopify/create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create checkout');
+      }
+
+      const data = await response.json();
+      return data.checkoutUrl;
+    } catch (err) {
+      console.error('Error creating checkout:', err);
     }
   };
 
@@ -229,14 +254,19 @@ const Cart = () => {
                 ))}
                 <div className="cart-summary-row">
                   <span>Sales Tax</span>
-                  <span>Included</span>
+                  <span>will be known at checkout</span>
                 </div>
                 <div className="cart-summary-total">
                   <span>Total</span>
                   <span>₹{total.toFixed(2)}</span>
                 </div>
               </div>
-              <button className="cart-checkout-btn">PROCEED TO CHECKOUT</button>
+              <button className="cart-checkout-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                createCheckout().then((url) => { window.location.href = url; });
+              }}
+              >PROCEED TO CHECKOUT</button>
             </div>
           </div>
         )}

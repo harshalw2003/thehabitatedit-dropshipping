@@ -296,7 +296,7 @@ const ProductDetails = () => {
               </div>
             ))}
           </div> */}
-          <ProductGrid></ProductGrid>
+          <ProductGrid />
         </div>
        
 

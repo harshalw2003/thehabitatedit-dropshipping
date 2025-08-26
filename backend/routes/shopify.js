@@ -1,6 +1,8 @@
 const express = require("express");
 const STOREFRONT_ACCESS_TOKEN = "56f906961bd692bea09127012bab9f9e";
 const STORE_DOMAIN = "https://ftap1q-bh.myshopify.com/";
+const authenticate = require('../middleware/auth.js');
+
 
 const router = express.Router();
 
@@ -75,22 +77,52 @@ router.post("/products", async (req, res) => {
   }
 });
 
-router.post("/create-cart", async (req, res) => {
-  const { merchandiseId, quantity } = req.body;
-  console.log(req.body);
+
+
+router.post("/create-checkout", authenticate.authenticateToken,   async (req, res) => {
+   // items = [{ merchandiseId: "...", quantity: 2 }, ...]
+   console.log("Create checkout request hit!");
+   console.log(req.user);
+   const cartItemsWithDetails = req.user.cart; 
+   console.log("cart Items: ", cartItemsWithDetails);
+   console.log("cart Length: ", cartItemsWithDetails.length) // Assuming req.user.cart contains the cart items with productId and quantity
+  // Build GraphQL lines input dynamically
+  let linesInput = [];
+  cartItemsWithDetails.forEach((item) => {
+    linesInput.push( `{
+        merchandiseId: "gid://shopify/ProductVariant/${item.variantId}",
+        quantity: ${item.quantity}
+      }`);
+  });
+
+
+    console.log("linesInput: ", linesInput);
+
   const query = `
     mutation {
       cartCreate(input: {
-        lines: [
-          {
-            quantity: ${quantity}
-            merchandiseId: "${merchandiseId}"
-          }
-        ]
+        lines: [${linesInput}]
       }) {
         cart {
           id
           checkoutUrl
+          lines(first: 10){
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    product {
+                      title
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
         userErrors {
           field
@@ -109,16 +141,43 @@ router.post("/create-cart", async (req, res) => {
       },
       body: JSON.stringify({ query }),
     });
+
     const data = await response.json();
-    console.log("Cart response:", JSON.stringify(data));
+    console.log("Cart response:", JSON.stringify(data, null, 2));
+
     const checkoutUrl = data.data.cartCreate.cart.checkoutUrl;
-    console.log(checkoutUrl);
-    res.json({ checkoutUrl });
+    console.log("Checkout Url: ", checkoutUrl)
+    res.json({ checkoutUrl, cart: data.data.cartCreate.cart });
   } catch (error) {
-    console.error("Cart create failed:", error.response?.data || error.message);
+    console.error("Cart create failed:", error.message);
+    res.status(500).json({ error: "Failed to create cart" });
+  }
+  
+
+  try {
+    const response = await fetch(`${STORE_DOMAIN}/api/2023-10/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": STOREFRONT_ACCESS_TOKEN,
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    const data = await response.json();
+    console.log("Cart response:", JSON.stringify(data, null, 2));
+
+    const checkoutUrl = data.data.cartCreate.cart.checkoutUrl;
+    console.log("Checkout Url: ", checkoutUrl)
+    res.json({ checkoutUrl, cart: data.data.cartCreate.cart });
+  } catch (error) {
+    console.error("Cart create failed:", error.message);
     res.status(500).json({ error: "Failed to create cart" });
   }
 });
+ 
+
+
 
 router.post("/product/:id", async (req, res) => {
   console.log("Fetching product details for handle:", req.params.id);

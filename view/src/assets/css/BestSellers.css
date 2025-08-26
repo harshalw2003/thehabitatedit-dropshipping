@@ -142,8 +142,7 @@
   .bestsellers-grid .product-grid__item {
  width: 70vw;
  background: #f5f2ef;
- height: 30vh; 
-
+ height: 330px; 
 
 }
 
@@ -166,7 +165,7 @@
   .bestsellers-grid .product-grid__cat{
 
     position: absolute;
-    top: 0px;
+    top: 10px;
     left: 10px;
     background-color: #fff;
     border-radius: 5px;

@@ -52,9 +52,7 @@ const ProductsPage = ({ selectedCollection = null }) => {
           </div>
           
           {/* Empty wrapper - Sort is now in the filter overlay */}
-          <div className="mobile-filter-sort-wrapper">
-            {/* Sort button removed - now included in filter overlay */}
-          </div>
+          
         </div>
         
         {/* Fixed mobile filter button at bottom left - only visible on mobile */}
@@ -75,9 +73,9 @@ const ProductsPage = ({ selectedCollection = null }) => {
                 <SortBy />
               </div>
             </div>
-            <div className="product-grid-container">
+            {/* <div className="product-grid-container"> */}
               <ProductGrid category={activeCategory} />
-            </div>
+            {/* </div> */}
         {/* <BestSellers /> */}
 
             <Footer />
