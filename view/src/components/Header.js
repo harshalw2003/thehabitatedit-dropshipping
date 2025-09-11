@@ -219,8 +219,8 @@ const Header = () => {
                       </a>
                     </>
                   )}
-                  <a href="#" className="dropdown-item">YOUR ORDERS</a>
-                  <a href="#" className="dropdown-item">YOUR WISHLIST</a>
+                  <Link to="/your-orders" className="dropdown-item">YOUR ORDERS</Link>
+                  <Link to="/wishlist" className="dropdown-item">YOUR WISHLIST</Link>
                 </div>
               )}
             </div>
@@ -286,7 +286,7 @@ const Header = () => {
             <Link to="/contact" className="mobile-nav-link" onClick={toggleMobileMenu}>
               CONTACT
             </Link>
-            <Link to="/orders" className="mobile-nav-link" onClick={toggleMobileMenu}>
+            <Link to="/your-orders" className="mobile-nav-link" onClick={toggleMobileMenu}>
               YOUR ORDERS
             </Link>
             <Link to="/wishlist" className="mobile-nav-link" onClick={toggleMobileMenu}>

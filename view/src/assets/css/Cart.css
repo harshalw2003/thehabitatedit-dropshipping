@@ -254,8 +254,10 @@
 }
 
 .login-prompt {
-  max-width: 400px;
+
+  width: 80vw;
   margin: 0 auto;
+
 }
 
 .login-prompt h2 {

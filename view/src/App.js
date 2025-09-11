@@ -8,7 +8,8 @@ import ProductsPage from './components/ProductsPage';
 import ScrollToTop from './components/ScrollToTop';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
-import About  from './components/About';
+import About from './components/About';
+import YourOrders from './components/YourOrders';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/about" element={<About />} />
+          <Route path="/your-orders" element={<YourOrders />} />
         </Routes>
       </Router>
     </div>
