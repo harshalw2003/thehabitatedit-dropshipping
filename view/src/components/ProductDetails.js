@@ -6,7 +6,8 @@ import Footer from './Footer';
 import '../assets/css/ProductDetails.css';
 import '../assets/css/LoadingAnimations.css'; // Import loading animations
 import ProductGrid from './ProductGrid';
-import { addToCart as apiAddToCart } from '../api/shopify';
+import { addToCart as apiAddToCart, addToWishlist as apiAddToWishlist } from '../api/shopify';
+
 import ip from '../ip.js';
 
 const ProductDetails = () => {
@@ -18,7 +19,7 @@ const ProductDetails = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
   const [showLoginPopup, setShowLoginPopup] = useState(false);
-
+console.log("Product: ", )
   // Scroll to top when component mounts or id changes
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -103,19 +104,14 @@ const ProductDetails = () => {
 
   const addToCart = async () => {
     if (!product) return;
-    
     try {
-      const productHandle = product.handle;
+      const productHandle = id;
       const productId = cleanProductId(product.id);
       const variantId = cleanVariantId(product.variants.edges[0].node.id);
-
-      // Add to cart API call
       const result = await apiAddToCart(productHandle, productId, variantId, quantity);
-      
       if (result.success) {
-        alert(`Added ${quantity} of ${product.title} to cart`);
+        alert('Product added to cart!');
       } else if (result.status === 401) {
-        // User is not authenticated, show login popup
         setShowLoginPopup(true);
       } else {
         alert('Failed to add to cart. Please try again.');
@@ -133,9 +129,56 @@ const ProductDetails = () => {
     window.location.reload();
   };
 
-  const addToWishlist = () => {
-    alert(`Added ${product.title} to wishlist`);
-  };
+  // const toggleWishlist = async (product) => {
+  //     // Check if user is logged in
+  //     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+     
+  //     const productHandle = product.handle;
+  
+  //     try {
+  //       // Check if product is already in wishlist using current state
+  //       const isInWishlist = wishlist.includes(productHandle);
+  
+  //       let success = false;
+        
+  //       // Make the API call
+  //       if (isInWishlist) {
+  //         // Remove from wishlist via API
+  //         console.log("Removing from wishlist:", productHandle);
+  //         success = await removeFromWishlist(productHandle);
+  //         console.log("Removed from wishlist response:", success);
+  //       } else {
+  //         // Add to wishlist via API
+  //         console.log("Adding to wishlist:", productHandle);
+  //         success = await addToWishlist(productHandle);
+  //         console.log("Added to wishlist response:", success);
+  //       }
+        
+  //       if (success) {
+  //         // Update local state
+  //         setWishlist(prevWishlist => {
+  //           let newWishlist;
+            
+  //           if (isInWishlist) {
+  //             newWishlist = prevWishlist.filter(handle => handle !== productHandle);
+  //           } else {
+  //             newWishlist = [...prevWishlist, productHandle];
+  //           }
+            
+  //           // Save updated wishlist to localStorage
+  //           try {
+  //             localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+  //           } catch (error) {
+  //             console.error("Error saving wishlist to localStorage:", error);
+  //           }
+            
+  //           return newWishlist;
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error updating wishlist:", error);
+  //     }
+  //   }
 
   return (
     <div className="product-details-page">
@@ -215,9 +258,9 @@ const ProductDetails = () => {
               <button className="add-to-cart-btn" onClick={addToCart}>
                 ADD TO CART
               </button>
-              <button className="wishlist-btn" onClick={addToWishlist}>
-                ♡
-              </button>
+              {/* <button className="wishlist-btn" onClick={}> */}
+                {/* ♡
+              </button> */}
             </div>
 
             {/* Product Information Tabs */}

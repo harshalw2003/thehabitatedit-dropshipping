@@ -319,7 +319,6 @@ export default function ProductGrid({ category = null, limit = null, sort = null
           <div className="spinner-circle"></div>
           <div className="spinner-text">Loading products...</div>
         </div>
-        
         {/* Skeleton loading placeholders */}
         <div className="product-grid__list">
           {[...Array(6)].map((_, index) => (
@@ -340,75 +339,62 @@ export default function ProductGrid({ category = null, limit = null, sort = null
     ) : (
       <div className={`product-grid__list ${fadeIn ? "fade-in" : ""}`}>
         {productsArray.map((product, index) => (
-        <div className="product-grid__link-container" key={`product-${product.node.handle}`}>
-          <Link to={`/product/${product.node.handle}`} className="product-grid__link">
-            <div className="product-grid__item" style={{animationDelay: `${index * 0.05}s`}}>
-              <div className="product-grid__img">
-                <img
-                  src={product.node.images.edges[0]?.node.url}
-                  alt={product.node.images.edges[0]?.node.altText || product.node.title}
-                  loading="lazy"
-                />
-                <div className="product-grid__actions">
-                  <button 
-                    className="product-grid__action-btn cart-btn"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      cartHandler(product.node);
-                    }}
-                    title="Add to Cart"
-                  >
-                    <img src={require("../assets/images/add-to-cart-icon.png")} alt="Add to Cart" />
-                  </button>
-                  <button 
-                    className={`product-grid__action-btn wishlist-btn ${wishlist.includes(product.node.handle) ? 'active' : ''}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      toggleWishlist(product.node);
-                    }}
-                    title={wishlist.includes(product.node.handle) ? "Remove from Wishlist" : "Add to Wishlist"}
-                    style={{ 
-                      background: 'none', 
-                      border: 'none',
-                      boxShadow: 'none',
-                      backgroundColor: 'transparent'
-                    }}
-                  >
-                    {wishlist.includes(product.node.handle) ? (
-                      <img src={require("../assets/images/wishlist-filled-icon.png")} alt="Remove from Wishlist" />
-                    ) : (
-                      <img src={require("../assets/images/wishlist-unfilled-icon.png")} alt="Add to Wishlist" />
-                    )}
-                  </button>
+          <div className="product-grid__link-container" key={`product-${product.node.handle}`}>
+            <Link to={`/product/${product.node.handle}`} className="product-grid__link">
+              <div className="product-grid__item" style={{animationDelay: `${index * 0.05}s`}}>
+                <div className="product-grid__img">
+                  <img
+                    src={product.node.images.edges[0]?.node.url}
+                    alt={product.node.images.edges[0]?.node.altText || product.node.title}
+                    loading="lazy"
+                  />
+                  <div className="product-grid__actions">
+                    <button 
+                      className={`product-grid__action-btn wishlist-btn ${wishlist.includes(product.node.handle) ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleWishlist(product.node);
+                      }}
+                      title={wishlist.includes(product.node.handle) ? "Remove from Wishlist" : "Add to Wishlist"}
+                      style={{ 
+                        background: 'none', 
+                        border: 'none',
+                        boxShadow: 'none',
+                        backgroundColor: 'transparent'
+                      }}
+                    >
+                      {wishlist.includes(product.node.handle) ? (
+                        <img src={require("../assets/images/wishlist-filled-icon.png")} alt="Remove from Wishlist" />
+                      ) : (
+                        <img src={require("../assets/images/wishlist-unfilled-icon.png")} alt="Add to Wishlist" />
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <h3 className="product-grid__cat">{product.node.collections.edges[0].node.title}</h3>
-
-              <div className="product-grid__name_price">
-                <div className="product-grid__name">{trimProductTitle(product.node.title)}</div>
-                <div className="product-grid__price">
-                  ₹{product.node.variants.edges[0].node.price.amount}
+                <h3 className="product-grid__cat">{product.node.collections.edges[0].node.title}</h3>
+                <div className="product-grid__name_price">
+                  <div className="product-grid__name">{trimProductTitle(product.node.title)}</div>
+                  <div className="product-grid__price">
+                    ₹{product.node.variants.edges[0].node.price.amount}
+                  </div>
+                  <span className="material-symbols-outlined product-grid__arrow">
+                    arrow_outward
+                  </span>
                 </div>
-                <span className="material-symbols-outlined product-grid__arrow">
-                  arrow_outward
-                </span>
+                {/* <button
+                  className="product-grid__buyNowBtn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    cartHandler(product.node.variants.edges[0].node.id);
+                  }}
+                >
+                  ADD TO CART
+                </button> */}
               </div>
-            {/* <button
-              className="product-grid__buyNowBtn"
-              onClick={(e) => {
-                e.preventDefault();
-                cartHandler(product.node.variants.edges[0].node.id);
-              }}
-            >
-              ADD TO CART
-            </button> */}
+            </Link>
           </div>
-        </Link>
-        </div>
-      ))}
-       
+        ))}
       </div>
     )}
     

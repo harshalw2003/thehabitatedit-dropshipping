@@ -182,11 +182,23 @@ const Header = () => {
               <a href="#">HOME</a>
             </Link>
             <Link to="/products" ><a href="#">PRODUCTS</a> </Link>
-           <> <Link to="/about"><a href="#">ABOUT US</a></Link> </>
-            <a href="#">CONTACT</a>
-            
+           <Link to="/about"><a href="#">ABOUT US</a></Link> 
+           <Link to="/contact"><a href="#">CONTACT</a></Link>
           </nav>
           <div className="header__actions">
+            {/* Search Bar */}
+            <form className="header-search-bar" onSubmit={e => e.preventDefault()}>
+              <div className="header-search-bar-inner">
+                <input
+                  type="text"
+                  className="header-search-input"
+                  placeholder="Search products..."
+                />
+                <button type="submit" className="header-search-btn">
+                  <span className="material-symbols-outlined">search</span>
+                </button>
+              </div>
+            </form>
             <div className="user-dropdown" ref={desktopDropdownRef}>
               <div className="user-icon-wrapper" onClick={toggleDesktopDropdown}>
                 <img src={require("../assets/images/user-icon.png")} alt="User" className="user-icon" />

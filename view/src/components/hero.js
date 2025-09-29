@@ -20,7 +20,7 @@ const  hero = () => {
     </p>
     </div>
      <div className="hero_title">
-      <h4 className='desktop_title'>ALL YOUR FAVORITES<br/>IN ONE PLACE</h4>
+      <h4 className='desktop_title'>ALL YOUR ESSENTIALS<br/>IN ONE PLACE</h4>
       <h4 className='mobile_title'>ESSENTIALS  <br/> THAT INSPIRE <br/> PRICES THAT AMAZE</h4>
     </div>
    </div>

@@ -251,6 +251,7 @@ router.get("/get-wishlist", authenticate.authenticateToken, async (req, res) => 
 router.post("/add-to-wishlist", authenticate.authenticateToken, async (req, res) => {
   try {
     const { productHandle } = req.body;
+    console.log(productHandle)
     // console.log("=== ADD TO WISHLIST DEBUG ===");
     // console.log("Adding item to wishlist for user:", req.user._id);
     // console.log("Product handle:", productHandle);

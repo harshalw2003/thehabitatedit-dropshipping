@@ -1,4 +1,4 @@
-const express = require("express");
+  const express = require("express");
 const STOREFRONT_ACCESS_TOKEN = "56f906961bd692bea09127012bab9f9e";
 const STORE_DOMAIN = "https://ftap1q-bh.myshopify.com/";
 const authenticate = require('../middleware/auth.js');
