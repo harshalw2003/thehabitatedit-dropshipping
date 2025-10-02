@@ -48,14 +48,7 @@ const YourOrders = () => {
   };
 
   return (
-    <div className="your-orders-page">
-      <Header />
       <div className="your-orders-container">
-        <div className="orders-header">
-          <h1>Your Orders</h1>
-          <p>{orders.length} orders placed</p>
-        </div>
-
         <div className="orders-list">
           {orders.map((order) => (
             <div key={order.id} className="order-card">
@@ -101,8 +94,8 @@ const YourOrders = () => {
             </div>
           ))}
         </div>
-      </div>
-      <Footer />
+     
+     
     </div>
   );
 };

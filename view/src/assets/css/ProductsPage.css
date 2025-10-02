@@ -1,12 +1,13 @@
 /* ProductsPage.css */
 .products-page {
     /* min-height: 100vh; */
-    background: rgb(245, 242, 239, 0.5);
+    /* background: rgba(247, 238, 231, 0.5); */
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
     position: relative;
     box-sizing: border-box;
+
 }
 
 .products-page__desktop {

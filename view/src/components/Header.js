@@ -1,27 +1,25 @@
-// Header.js
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/css/Header.css";
 import LoginPopup from "./LoginPopup";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ip from '../ip.js';
 
 const Header = () => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
-  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  
-  const desktopDropdownRef = useRef(null);
-  const mobileDropdownRef = useRef(null);
 
-  const openLoginPopup = () => {
-    setIsLoginPopupOpen(true);
-    // Close dropdowns when opening login popup
-    setIsDesktopDropdownOpen(false);
-    setIsMobileDropdownOpen(false);
+  // Get current route for active tab
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleUserIconClick = () => {
+    if (!isLoggedIn) {
+      setIsLoginPopupOpen(true);
+    } else {
+      navigate('/profile');
+    }
   };
 
   const closeLoginPopup = () => {
@@ -30,54 +28,7 @@ const Header = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    // Close dropdown when toggling mobile menu
-    setIsMobileDropdownOpen(false);
   };
-  
-  const toggleDesktopDropdown = (e) => {
-    e.preventDefault();
-    setIsDesktopDropdownOpen(!isDesktopDropdownOpen);
-  };
-  
-  const toggleMobileDropdown = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsMobileDropdownOpen(!isMobileDropdownOpen);
-  };
-  
-  // Handle click outside to close dropdowns
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // For desktop dropdown
-      if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target)) {
-        setIsDesktopDropdownOpen(false);
-      }
-      
-      // For mobile dropdown
-      if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target)) {
-        setIsMobileDropdownOpen(false);
-      }
-    };
-    
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // Effect for resetting dropdowns when scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      // Close dropdowns on scroll
-      setIsDesktopDropdownOpen(false);
-      setIsMobileDropdownOpen(false);
-    };
-    
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
   
   // Function to fetch user data from the backend
   const fetchUserData = async () => {
@@ -124,24 +75,8 @@ const Header = () => {
     }
   };
   
-  // Show logout confirmation
-  const showLogoutConfirmation = (e) => {
-    e.preventDefault();
-    // Close dropdowns
-    setIsDesktopDropdownOpen(false);
-    setIsMobileDropdownOpen(false);
-    // Show confirmation popup
-    setShowLogoutConfirm(true);
-  };
-  
-  // Cancel logout
-  const cancelLogout = () => {
-    setShowLogoutConfirm(false);
-  };
-  
-  // Handle actual logout after confirmation
+  // Handle actual logout
   const handleLogout = async () => {
-    // Notify backend about logout
     try {
       const response = await fetch(`http://${ip}:8001/user/logout`, {
         method: 'POST',
@@ -154,20 +89,12 @@ const Header = () => {
       if (data.success) {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('authToken');
-        console.log("Logged out successfully");
-      } else {
-        console.error("Failed to log out");
+        setIsLoggedIn(false);
+        setUserData(null);
       }
     } catch(error) {
       console.error('Error logging out:', error);
     }
-
-    // Update state
-    setIsLoggedIn(false);
-    setUserData(null);
-    
-    // Close confirmation popup
-    setShowLogoutConfirm(false);
   };
 
   return (
@@ -178,12 +105,16 @@ const Header = () => {
         <div className="header__main">
           <Link to="/" className="header__logo">T H E</Link>
           <nav className="header__nav">
-            <Link to={`/`} className="nav__link">
-              <a href="#">HOME</a>
+            <Link to="/" className={location.pathname === "/" ? "active" : ""}>
+              HOME
             </Link>
-            <Link to="/products" ><a href="#">PRODUCTS</a> </Link>
-           <Link to="/about"><a href="#">ABOUT US</a></Link> 
-           <Link to="/contact"><a href="#">CONTACT</a></Link>
+            <Link to="/products" className={location.pathname.startsWith("/products") ? "active" : ""}>
+              PRODUCTS
+            </Link>
+            <Link to="/about" className={location.pathname.startsWith("/about") ? "active" : ""}>
+              ABOUT
+            </Link>
+            {/* <Link to="/contact" className={location.pathname.startsWith("/contact") ? "active" : ""}>CONTACT</Link> */}
           </nav>
           <div className="header__actions">
             {/* Search Bar */}
@@ -199,42 +130,10 @@ const Header = () => {
                 </button>
               </div>
             </form>
-            <div className="user-dropdown" ref={desktopDropdownRef}>
-              <div className="user-icon-wrapper" onClick={toggleDesktopDropdown}>
+            <div className="user-dropdown">
+              <div className="user-icon-wrapper" onClick={handleUserIconClick} style={{cursor: 'pointer'}}>
                 <img src={require("../assets/images/user-icon.png")} alt="User" className="user-icon" />
               </div>
-              {isDesktopDropdownOpen && (
-                <div className="dropdown-menu">
-                  {!isLoggedIn ? (
-                    <a 
-                      href="#" 
-                      className="dropdown-item"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openLoginPopup();
-                      }}
-                    >
-                      LOGIN
-                    </a>
-                  ) : (
-                    <>
-                      <div className="dropdown-user-info">
-                        Hello, {userData?.firstName || "User"}
-                        {!userData && <div className="loading-indicator">Loading...</div>}
-                      </div>
-                      <a 
-                        href="#" 
-                        className="dropdown-item"
-                        onClick={showLogoutConfirmation}
-                      >
-                        LOGOUT
-                      </a>
-                    </>
-                  )}
-                  <Link to="/your-orders" className="dropdown-item">YOUR ORDERS</Link>
-                  <Link to="/wishlist" className="dropdown-item">YOUR WISHLIST</Link>
-                </div>
-              )}
             </div>
             <Link to="/cart" className="bag-link">
               <img src={require("../assets/images/shopping-cart.png")} alt="Cart" className="cart-icon" />
@@ -251,7 +150,7 @@ const Header = () => {
         <div className="mobile_header__main">
           <div className="mobile-menu-actions">
             <div className="mobile-user-wrapper">
-              <div className="mobile-user-icon-wrapper" onClick={!isLoggedIn ? openLoginPopup : showLogoutConfirmation}>
+              <div className="mobile-user-icon-wrapper" onClick={handleUserIconClick} style={{cursor: 'pointer'}}>
                 <img src={require("../assets/images/user-icon.png")} alt="User" className="mobile-user-icon" />
               </div>
             </div>
@@ -293,16 +192,9 @@ const Header = () => {
             </Link>
             <Link to="/about" className="mobile-nav-link" onClick={toggleMobileMenu}>
               ABOUT US
-
             </Link>
             <Link to="/contact" className="mobile-nav-link" onClick={toggleMobileMenu}>
               CONTACT
-            </Link>
-            <Link to="/your-orders" className="mobile-nav-link" onClick={toggleMobileMenu}>
-              YOUR ORDERS
-            </Link>
-            <Link to="/wishlist" className="mobile-nav-link" onClick={toggleMobileMenu}>
-              YOUR WISHLIST
             </Link>
           </nav>
           
@@ -311,20 +203,6 @@ const Header = () => {
 
       {/* Login Popup */}
       <LoginPopup isOpen={isLoginPopupOpen} onClose={closeLoginPopup} onLoginSuccess={handleLoginSuccess} />
-      
-      {/* Logout Confirmation Popup */}
-      {showLogoutConfirm && (
-        <div className="logout-confirmation-overlay">
-          <div className="logout-confirmation">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to log out?</p>
-            <div className="logout-confirmation__buttons">
-              <button className="cancel-btn" onClick={cancelLogout}>Cancel</button>
-              <button className="confirm-btn" onClick={handleLogout}>Yes, Log Out</button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

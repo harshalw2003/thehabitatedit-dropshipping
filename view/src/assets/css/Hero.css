@@ -1,12 +1,14 @@
 .hero{
     display: flex;
     /* border: 1px solid red; */
-    height: 30vh;
+    height: 25vh;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
     /* border: 1px solid black; */
+    /* background: rgba(251, 239, 229, 0.5); */
+
 }
 
 .hero_info{
@@ -19,15 +21,12 @@
     flex-direction: column;
     /* gap: -1rem; */
    
-
-
 }
 .hero_images{
 
     display: flex;
     align-items: center;
     /* border: 1px solid red; */
-
 
 }
 
@@ -111,8 +110,6 @@
     width: 100%;
     position: relative;
     padding: 20px 0 30px;
-    /* background-color: #fff; */
-    /* border-bottom: 2px solid #e5e5e5; */
   }
     
   .hero_info {

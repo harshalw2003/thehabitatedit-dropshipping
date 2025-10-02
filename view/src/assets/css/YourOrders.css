@@ -1,29 +1,12 @@
 .your-orders-page {
-  background-color: #f5f2ef;
+  /* background-color: #f5f2ef; */
   min-height: 100vh;
 }
 
 .your-orders-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.orders-header {
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.orders-header h1 {
-  font-size: 32px;
-  color: #3a2926;
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-
-.orders-header p {
-  color: #8a7e77;
-  font-size: 16px;
+  padding: 0px 20px;
 }
 
 .orders-list {

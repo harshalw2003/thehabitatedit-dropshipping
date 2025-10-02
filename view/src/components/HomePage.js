@@ -15,7 +15,7 @@ const HomePage = () => {
       <div className="homepage__desktop">
         <Header />
         <Hero />
-
+        
         <div className='hero-br'></div>
         
         {/* Browse All Products Button */}

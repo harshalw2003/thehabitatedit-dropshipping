@@ -99,7 +99,8 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    background: white;
+    border: 1px solid red;
+    
   }
 
   .product-grid__img {
@@ -110,7 +111,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    background: rgb(255, 255, 255);
     position: relative;
     margin-bottom: 8px;
   }
@@ -266,7 +267,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #f5f2ef;
+  background: rgb(245, 242, 239, 0.3);
   height: 40vh;
 }
 

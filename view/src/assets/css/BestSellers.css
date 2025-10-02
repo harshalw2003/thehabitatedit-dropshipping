@@ -5,7 +5,8 @@
 
   width: 100vw;
   box-sizing: border-box;
-  
+  /* border: 1px solid red; */
+  padding-bottom: 20px;
 }
 
 .bestseller-header{
@@ -141,7 +142,7 @@
   }
   .bestsellers-grid .product-grid__item {
  width: 70vw;
- background: #f5f2ef;
+ background: rgb(245, 242, 239, 0.3);
  height: 330px; 
 
 }

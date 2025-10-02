@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@0,400;0,700;1,400;1,700&family=Major+Mono+Display&display=swap');
+
+
+.profile-container {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  background-color: #ffffff;
+  /* padding: 20px; */
+}
+
+.profile-sidebar {
+  width: 20vw;
+  border-radius: 0;
+  padding: 0px 0px 0px 15px;
+  margin-left: 0;
+  font-family: "IBM Plex Mono", monospace;
+  border-right: 2px solid #e5e5e5;
+
+
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #e5e5e5;
+  height: fit-content;
+  padding: 15px 0px;
+
+}
+
+.sidebar-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333333;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+
+
+}
+
+.sidebar-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0;
+  height: 100vh;
+  margin-top: 10px;
+  margin-right: 10px;
+ 
+}
+
+.nav-item {
+  padding: 15px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 12px;
+  color: #666666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  border-radius: 0;
+  border-bottom: 1px solid #e5e5e5;
+  color: #333333;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.nav-item img {
+
+  width: 15px;
+  height: 15px;
+  display: none;
+
+}
+
+.nav-item.active img{
+
+  display: block;
+}
+
+.nav-item span {
+
+  font-weight: 500;
+
+}
+
+.nav-item:hover {
+  background-color: transparent;
+  color: #333333;
+}
+
+.nav-item.active {
+  background-color: transparent;
+  font-weight: 500;
+  color: #333333;
+}
+
+.nav-item.logout {
+  margin-top: 10px;
+  padding-top: 15px;
+  color: #fff;
+  font-size: 14px;
+  padding: 15px 0 8px 0;
+  background-color: rgb(239, 119, 27, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.nav-item.logout:hover {
+  background-color: transparent;
+  color: #e86563;
+  border: 1px solid #333333;
+}
+
+.profile-content {
+
+  width: 80vw;
+  border-radius: 0;
+  height: fit-content;
+  margin-right: 10px;
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-content-heading {
+  margin: 0 0 20px;
+  font-size: 18px;
+  color: #333333;
+  font-weight: 400;
+  border-bottom: 2px solid #e5e5e5;
+  padding: 13px;
+  width: 100%;
+  text-align: left;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 1px;
+  display: flex;
+  gap: 10px;
+
+}
+
+.profile-content-heading img{
+
+  width: 25px;
+  height: 25px;
+}
+
+.profile-section{
+
+  display: none;
+}
+
+.profile-section.active{
+  display:block;
+}
+
+.profile-details-container {
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  /* border: 1px solid red; */
+  height: fit-content;
+}
+
+.profile-form {
+  display: flex;
+  /* flex-direction: column; */
+  width: 100%;
+  gap: 20px;
+  /* border: 1px solid gray; */
+  flex-wrap: wrap;
+
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width:40%;
+  /* border: 1px solid red; */
+  align-items: self-start;
+}
+
+.form-group label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 14px;
+  color: #333333;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: rgb(239, 119, 27);
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  /* border: 1px solid blue; */
+  width: 50%;
+}
+
+.edit-btn, .save-btn, .cancel-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-btn {
+  background-color: rgb(239, 119, 27, 0.8);
+  color: white;
+}
+
+.save-btn {
+  background-color: rgb(239, 119, 27, 0.8);
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #e5e5e5;
+  color: #333333;
+}
+
+.edit-btn:hover, .save-btn:hover {
+  background-color: rgb(239, 119, 27, 1);
+}
+
+.cancel-btn:hover {
+  background-color: #d5d5d5;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .profile-content {
+    margin-left: 0;
+  }
+}

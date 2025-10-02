@@ -1,10 +1,6 @@
 /* HomePage.css */
 .homepage {
-    /* min-height: 100vh; */
-    background: rgb(245, 242, 239, 0.5);
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
+    width: 100vw;
     position: relative;
     box-sizing: border-box;
 }
@@ -12,9 +8,7 @@
 .homepage__desktop {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
+    width: 100vw;
 }
 
 
@@ -22,9 +16,9 @@
 .hero-br{
 
     border-bottom: 2px solid #e5e5e5;
-    width: 94%;
+    width: 98%;
     height: 2px;
-    margin: 10px auto;
+    margin: 0px auto 20px auto;
 
 }
 
