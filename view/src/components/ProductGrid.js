@@ -17,7 +17,7 @@ export default function ProductGrid({ category = null, limit = null, sort = null
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [allProducts, setAllProducts] = useState([]); // Store all fetched products
-  const productsPerPage = 8; // Show 2 rows initially (4 products per row)
+  const productsPerPage = 100; // Show 2 rows initially (4 products per row)
   const [notification, setNotification] = useState({
     visible: false,
     message: '',
@@ -372,7 +372,14 @@ export default function ProductGrid({ category = null, limit = null, sort = null
                     </button>
                   </div>
                 </div>
-                <h3 className="product-grid__cat">{product.node.collections.edges[0].node.title}</h3>
+                <h3 className="product-grid__cat">
+                  {product.node.collections.edges.map((collection, index) => (
+                    <React.Fragment key={collection.node.title}>
+                      {index > 0 && " | "}
+                      {collection.node.title}
+                    </React.Fragment>
+                  ))}
+                </h3>
                 <div className="product-grid__name_price">
                   <div className="product-grid__name">{trimProductTitle(product.node.title)}</div>
                   <div className="product-grid__price">

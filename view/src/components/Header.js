@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../assets/css/Header.css";
 import LoginPopup from "./LoginPopup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -9,6 +9,25 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchRef = useRef(null);
+
+  // Handle click outside search results
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Get current route for active tab
   const location = useLocation();
@@ -28,6 +47,53 @@ const Header = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleSearch = async (searchValue) => {
+    setSearchTerm(searchValue);
+    
+    if (searchValue.trim() === "") {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(`http://${ip}:8001/products?search=${encodeURIComponent(searchValue)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const filteredProducts = data.products.edges
+          .filter(({ node }) => 
+            node.title.toLowerCase().includes(searchValue.toLowerCase())
+          )
+          .map(({ node }) => ({
+            id: node.id,
+            title: node.title,
+            handle: node.handle
+          }));
+        
+        setSearchResults(filteredProducts);
+        setShowResults(true);
+      }
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleProductClick = (handle) => {
+    setShowResults(false);
+    setSearchTerm("");
+    navigate(`/products/${handle}`);
   };
   
   // Function to fetch user data from the backend
@@ -118,18 +184,42 @@ const Header = () => {
           </nav>
           <div className="header__actions">
             {/* Search Bar */}
-            <form className="header-search-bar" onSubmit={e => e.preventDefault()}>
+            <div className="header-search-bar" ref={searchRef}>
               <div className="header-search-bar-inner">
                 <input
                   type="text"
                   className="header-search-input"
                   placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  onFocus={() => {
+                    if (searchTerm.trim() !== "" && searchResults.length > 0) setShowResults(true);
+                  }}
                 />
-                <button type="submit" className="header-search-btn">
+                <button type="button" className="header-search-btn">
                   <span className="material-symbols-outlined">search</span>
                 </button>
               </div>
-            </form>
+              {showResults && (searchResults.length > 0 || isSearching) && (
+                <div className="search-results-dropdown">
+                  {isSearching ? (
+                    <div className="search-result-item">Searching...</div>
+                  ) : searchResults.length > 0 ? (
+                    searchResults.map((product) => (
+                      <div
+                        key={product.id}
+                        className="search-result-item"
+                        onClick={() => handleProductClick(product.handle)}
+                      >
+                        {product.title}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="search-result-item">No products found</div>
+                  )}
+                </div>
+              )}
+            </div>
             <div className="user-dropdown">
               <div className="user-icon-wrapper" onClick={handleUserIconClick} style={{cursor: 'pointer'}}>
                 <img src={require("../assets/images/user-icon.png")} alt="User" className="user-icon" />
@@ -149,7 +239,9 @@ const Header = () => {
 
         <div className="mobile_header__main">
           <div className="mobile-menu-actions">
+              <span className="material-symbols-outlined">search</span>
             <div className="mobile-user-wrapper">
+            
               <div className="mobile-user-icon-wrapper" onClick={handleUserIconClick} style={{cursor: 'pointer'}}>
                 <img src={require("../assets/images/user-icon.png")} alt="User" className="mobile-user-icon" />
               </div>

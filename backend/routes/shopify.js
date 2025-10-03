@@ -7,9 +7,13 @@ const authenticate = require('../middleware/auth.js');
 const router = express.Router();
 
 router.post("/products", async (req, res) => {
+  console.log("Query received: ", req.query);
+  console.log("Params received: ", req.params);
+  const searchTerm = req.query.search || '';
+  
   const query = `
     {
-      products(first: 10) {
+      products(first: 100) {
         edges {
           node {
             id
@@ -67,9 +71,43 @@ router.post("/products", async (req, res) => {
   });
 
   const data = await response.json();
-  if (data) {
-    // console.log("Products fetched successfully:", JSON.stringify(data));
-    res.json(data);
+  if (data && data.data && data.data.products) {
+    // Filter products if category is provided in query params
+    if (req.query.category && req.query.category !== 'All products') {
+      console.log("Filtering for category:", req.query.category);
+      const filteredProducts = {
+        data: {
+          products: {
+            edges: data.data.products.edges.filter(product => {
+              // Get all collection titles for this product
+              const productCollections = product.node.collections.edges.map(
+                edge => edge.node.title
+              );
+              console.log("Product:", product.node.title);
+              console.log("Collections:", productCollections);
+              
+              // Check if any collection matches the category (exact match)
+              const hasMatchingCollection = product.node.collections.edges.some(
+                collection => collection.node.title.trim() === req.query.category.trim()
+              );
+              
+              // if (hasMatchingCollection) {
+              //   console.log("✅ Product matches category:", product.node.title);
+              // } else {
+              //   // console.log("❌ Product does not match category:", product.node.title);
+              // }
+              
+              return hasMatchingCollection;
+            })
+          }
+        }
+      };
+      console.log("Filtered products count:", filteredProducts.data.products.edges.length);
+      res.json(filteredProducts);
+    } else {
+      // If no category filter or 'All products' is selected, return all products
+      res.json(data);
+    }
   } else {
     res.json({
       message: "Error calling api",
