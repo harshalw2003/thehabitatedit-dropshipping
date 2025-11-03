@@ -16,7 +16,7 @@ body::-webkit-scrollbar{
   text-align: center;
   width: 100vw;
   background-color: rgb(255, 255, 255);
-  border: 1px solid red;
+  /* border: 1px solid red; */
   width: 100vw;
 
 }

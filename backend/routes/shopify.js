@@ -72,42 +72,35 @@ router.post("/products", async (req, res) => {
 
   const data = await response.json();
   if (data && data.data && data.data.products) {
-    // Filter products if category is provided in query params
-    if (req.query.category && req.query.category !== 'All products') {
-      console.log("Filtering for category:", req.query.category);
-      const filteredProducts = {
-        data: {
-          products: {
-            edges: data.data.products.edges.filter(product => {
-              // Get all collection titles for this product
-              const productCollections = product.node.collections.edges.map(
-                edge => edge.node.title
-              );
-              console.log("Product:", product.node.title);
-              console.log("Collections:", productCollections);
-              
-              // Check if any collection matches the category (exact match)
-              const hasMatchingCollection = product.node.collections.edges.some(
-                collection => collection.node.title.trim() === req.query.category.trim()
-              );
-              
-              // if (hasMatchingCollection) {
-              //   console.log("✅ Product matches category:", product.node.title);
-              // } else {
-              //   // console.log("❌ Product does not match category:", product.node.title);
-              // }
-              
-              return hasMatchingCollection;
-            })
-          }
-        }
-      };
-      console.log("Filtered products count:", filteredProducts.data.products.edges.length);
-      res.json(filteredProducts);
-    } else {
-      // If no category filter or 'All products' is selected, return all products
-      res.json(data);
+    // Apply optional category and search filtering
+    const category = req.query.category || '';
+    const search = (req.query.search || '').trim().toLowerCase();
+
+    let edges = data.data.products.edges;
+
+    if (category && category !== 'All products') {
+      console.log("Filtering for category:", category);
+      edges = edges.filter(product => {
+        return product.node.collections.edges.some(
+          collection => collection.node.title && collection.node.title.trim() === category.trim()
+        );
+      });
+      console.log("After category filter, count:", edges.length);
     }
+
+    if (search) {
+      console.log("Filtering for search:", search);
+      edges = edges.filter(product => {
+        const title = (product.node.title || '').toLowerCase();
+        const desc = (product.node.description || '').toLowerCase();
+        // Match if title or description contains the search term
+        return title.includes(search) || desc.includes(search);
+      });
+      console.log("After search filter, count:", edges.length);
+    }
+
+    // Return filtered shape consistent with Shopify response
+    res.json({ data: { products: { edges } } });
   } else {
     res.json({
       message: "Error calling api",

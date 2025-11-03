@@ -396,15 +396,17 @@
 .product-grid__actions {
   position: absolute;
   top: 5px;
-  right: 5px;
+  right: 2px;
   display: flex;
   /* gap: 2px; */
   z-index: 5;
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  width: 60px;
-  
+  /* width: 0px; */
+  border: 1px solid red;
+
+ 
 }
 
 /* Show buttons by default on mobile */
@@ -427,6 +429,7 @@
   .product-grid__action-btn {
     width: 30px;
     height: 30px;
+    /* border: 1px solid green; */
   }
 }
 
@@ -439,8 +442,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 18px;
+  height: 18px;
   background: transparent;
   cursor: pointer;
   box-shadow: none;
@@ -468,6 +471,7 @@
   width: 18px;
   height: 18px;
   display: block;
+  border: 1px solid green;
 }
 
 

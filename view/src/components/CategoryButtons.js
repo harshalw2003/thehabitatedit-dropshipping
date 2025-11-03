@@ -19,7 +19,7 @@ const CategoryButtons = ({ activeCategory: externalActiveCategory, setActiveCate
   const categories = [
     'All products',
     'Tech & Gadgets',
-    'Self care',
+    'Self Care',
     'Home Decor',
     'Auto Care'
   ];

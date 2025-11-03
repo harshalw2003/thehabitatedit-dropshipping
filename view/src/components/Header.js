@@ -60,7 +60,8 @@ const Header = () => {
 
     setIsSearching(true);
     try {
-      const response = await fetch(`http://${ip}:8001/products?search=${encodeURIComponent(searchValue)}`, {
+      // Backend mounts shopify routes under /shopify
+      const response = await fetch(`http://${ip}:8001/shopify/products?search=${encodeURIComponent(searchValue)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,17 +70,30 @@ const Header = () => {
 
       if (response.ok) {
         const data = await response.json();
-        const filteredProducts = data.products.edges
-          .filter(({ node }) => 
-            node.title.toLowerCase().includes(searchValue.toLowerCase())
-          )
-          .map(({ node }) => ({
-            id: node.id,
-            title: node.title,
-            handle: node.handle
+
+        // Backend returns the Shopify response object (it may be nested as data.data.products)
+        const productsEdges = (data && data.data && data.data.products && data.data.products.edges)
+          || (data && data.products && data.products.edges)
+          || [];
+
+        // Print raw products to console for debugging as requested
+        console.log('Search response productsEdges:', productsEdges);
+
+        // Filter and map to a simple shape (include image for UI)
+        const filteredProducts = productsEdges
+          .filter(({ node }) => node && node.title && node.title.toLowerCase().includes(searchValue.toLowerCase()))
+          .map(({ node }) => ({ 
+            id: node.id, 
+            title: node.title, 
+            handle: node.handle,
+            image: node.images && node.images.edges && node.images.edges[0] && node.images.edges[0].node && node.images.edges[0].node.url
+              ? node.images.edges[0].node.url
+              : null
           }));
-        
-        setSearchResults(filteredProducts);
+
+  console.log('Filtered products for UI:', filteredProducts);
+  setSearchResults(filteredProducts);
+        // Show results even if empty so we can display "No products found"
         setShowResults(true);
       }
     } catch (error) {
@@ -93,7 +107,8 @@ const Header = () => {
   const handleProductClick = (handle) => {
     setShowResults(false);
     setSearchTerm("");
-    navigate(`/products/${handle}`);
+    // Navigate to product details page
+    navigate(`/product/${handle}`);
   };
   
   // Function to fetch user data from the backend
@@ -200,25 +215,36 @@ const Header = () => {
                   <span className="material-symbols-outlined">search</span>
                 </button>
               </div>
-              {showResults && (searchResults.length > 0 || isSearching) && (
-                <div className="search-results-dropdown">
-                  {isSearching ? (
-                    <div className="search-result-item">Searching...</div>
-                  ) : searchResults.length > 0 ? (
-                    searchResults.map((product) => (
-                      <div
-                        key={product.id}
-                        className="search-result-item"
-                        onClick={() => handleProductClick(product.handle)}
-                      >
-                        {product.title}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="search-result-item">No products found</div>
-                  )}
-                </div>
-              )}
+                {showResults && (searchResults.length > 0 || isSearching) && (
+                  <>
+                    {/* Backdrop to capture clicks outside and allow dropdown to overlay page */}
+                    <div className="search-results-backdrop" onClick={() => setShowResults(false)} />
+                    <div className="search-results-dropdown">
+                      {isSearching ? (
+                        <div className="search-result-item">Searching...</div>
+                      ) : searchResults.length > 0 ? (
+                        searchResults.map((product) => (
+                          <div
+                            key={product.id}
+                            className="search-result-item"
+                            onClick={() => handleProductClick(product.handle)}
+                          >
+                            <div className="search-result-image-wrapper">
+                              {product.image ? (
+                                <img src={product.image} alt={product.title} className="search-result-image" />
+                              ) : (
+                                <div className="search-result-image placeholder" />
+                              )}
+                            </div>
+                            <div className="search-result-text">{product.title}</div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="search-result-item">No products found</div>
+                      )}
+                    </div>
+                  </>
+                )}
             </div>
             <div className="user-dropdown">
               <div className="user-icon-wrapper" onClick={handleUserIconClick} style={{cursor: 'pointer'}}>

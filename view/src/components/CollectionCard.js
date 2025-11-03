@@ -25,7 +25,7 @@ const CollectionCard = ({ collection }) => {
         <p className="collection-card__description">{collection.description || 'Explore our collection'}</p>
         <button className="collection-card__button">
           SHOP NOW
-          <img src={require("../assets/images/up-right.png")} alt="Arrow" className="button-arrow" />
+          <img src={require("../assets/images/up-right.png")} alt="Arrow" className="button-arrow" onClick={handleClick} />
         </button>
       </div>
     </div>

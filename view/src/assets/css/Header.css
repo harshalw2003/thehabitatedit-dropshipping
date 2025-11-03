@@ -3,6 +3,7 @@
     display: flex;
     align-items: center;
     margin-right: 18px;
+    position: relative; /* make dropdown absolute positioning relative to this container */
 }
 .header-search-bar-inner {
     position: relative;
@@ -12,7 +13,7 @@
     padding: 8px 38px 8px 14px;
     border-radius: 10px !important;
     border: 1px solid #e2e8f0;
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
     outline: none;
     width: 100%;
     background: #fff;
@@ -23,7 +24,7 @@
 .header-search-input:placeholder {
 
     color: #3a2926 !important;
-    font-size: 0.3rem;
+    font-size: 0.5rem;
 
 }
 
@@ -60,19 +61,68 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-height: 300px;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 10001; /* very high so it overlays page content */
+    min-width: 280px;
+    width: max(200px, 36vw);
+    margin-top: 6px;
+}
+
+/* Transparent backdrop behind the dropdown to capture outside clicks and allow dropdown to overlap content */
+.search-results-backdrop {
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    background: transparent;
+    z-index: 10000; /* below dropdown but above most page content */
 }
 
 .search-result-item {
-    padding: 10px 14px;
+    padding: 8px 8px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #3a2926;
-    transition: background-color 0.2s;
+    transition: background-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .search-result-item:hover {
     background-color: #f7f7f7;
+}
+
+.search-result-image-wrapper {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-result-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.search-result-image.placeholder {
+    width: 100%;
+    height: 100%;
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+
+.search-result-text {
+    flex: 1 1 auto;
+    text-align: left;
+    color: #3a2926;
+    font-weight: 500;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Header.css */
