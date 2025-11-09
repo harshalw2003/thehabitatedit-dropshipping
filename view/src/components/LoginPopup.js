@@ -5,6 +5,7 @@ import ip from '../ip.js';
 const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -17,7 +18,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
     
     // Validate input based on whether it's a new user (signup) or existing user (login)
     const isValidInput = isNewUser 
-      ? (phoneNumber.length === 10 && firstName.trim() !== '' && lastName.trim() !== '')
+      ? (phoneNumber.length === 10 && firstName.trim() !== '' && lastName.trim() !== '' && email.trim() !== '' && email.includes('@'))
       : (phoneNumber.length === 10);
     
     if (isValidInput) {
@@ -26,7 +27,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
       
       // Prepare request body based on whether it's new user or not
       const requestBody = isNewUser
-        ? { firstName, lastName, phoneNumber }
+        ? { firstName, lastName, email, phoneNumber }
         : { phoneNumber };
         
       fetch(`http://${ip}:8001/user/send-otp`,
@@ -60,6 +61,10 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const handleLastNameChange = (e) => {
     setLastName(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePhoneChange = (e) => {
@@ -149,6 +154,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
     setIsNewUser(false);
     setFirstName('');
     setLastName('');
+    setEmail('');
     setAlert({ message: '', type: '' });
   };
 
@@ -225,6 +231,17 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
                     value={lastName}
                     onChange={handleLastNameChange}
                     placeholder="Enter your last name"
+                    className="login-popup__text-input"
+                  />
+                </div>
+
+                <div className="login-popup__input-group">
+                  <label>Email</label>
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="Enter your email address"
                     className="login-popup__text-input"
                   />
                 </div>

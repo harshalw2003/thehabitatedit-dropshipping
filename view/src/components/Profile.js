@@ -26,7 +26,7 @@ const Profile = () => {
   const fetchUserDetails = async () => {
     try {
       const authToken = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/user/profile', {
+      const response = await fetch('http://localhost:8001/user/get-user-details', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${authToken}`
@@ -35,12 +35,14 @@ const Profile = () => {
       
       if (response.ok) {
         const data = await response.json();
-        setUserDetails({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          email: data.email || '',
-          phone: data.phone || ''
-        });
+        if (data.success && data.user) {
+          setUserDetails({
+            firstName: data.user.firstName || '',
+            lastName: data.user.lastName || '',
+            email: data.user.email || '',
+            phone: data.user.phoneNumber || ''
+          });
+        }
       }
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -61,24 +63,35 @@ const Profile = () => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/user/update-profile', {
-        method: 'PUT',
+      const response = await fetch('http://localhost:8001/user/update-user-details', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`
         },
-        body: JSON.stringify(userDetails)
+        body: JSON.stringify({
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName,
+          email: userDetails.email
+        })
       });
 
       if (response.ok) {
-        setIsEditing(false);
-        alert('Profile updated successfully!');
+        const data = await response.json();
+        if (data.success) {
+          setIsEditing(false);
+          alert('Profile updated successfully!');
+          // Refresh user details after update
+          await fetchUserDetails();
+        } else {
+          throw new Error(data.message || 'Failed to update profile');
+        }
       } else {
         throw new Error('Failed to update profile');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-      // alert('Failed to update profile. Please try again.');
+      alert(error.message || 'Failed to update profile. Please try again.');
     }
   };
 
@@ -137,14 +150,14 @@ const Profile = () => {
               {loading ? (
                 <p>Loading...</p>
               ) : (
-                <form onSubmit={handleUpdateProfile} className="profile-form">
+                <form className="profile-form">
                   <div className="form-group">
                     <label htmlFor="firstName">First Name</label>
                     <input
                       type="text"
                       id="firstName"
                       name="firstName"
-                      value="Harshal"
+                      value={userDetails.firstName}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
@@ -155,7 +168,7 @@ const Profile = () => {
                       type="text"
                       id="lastName"
                       name="lastName"
-                      value="Warukar"
+                      value={userDetails.lastName}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
@@ -166,7 +179,7 @@ const Profile = () => {
                       type="email"
                       id="email"
                       name="email"
-                      value="harshalwarukar12@gmail.com"
+                      value={userDetails.email}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
@@ -177,7 +190,7 @@ const Profile = () => {
                       type="tel"
                       id="phone"
                       name="phone"
-                      value="9766629195"
+                      value={userDetails.phone}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
@@ -185,7 +198,13 @@ const Profile = () => {
                   <div className="profile-actions">
                     {isEditing ? (
                       <>
-                        <button type="submit" className="save-btn">Save Changes</button>
+                        <button 
+                          type="button" 
+                          className="save-btn"
+                          onClick={handleUpdateProfile}
+                        >
+                          Save Changes
+                        </button>
                         <button 
                           type="button" 
                           className="cancel-btn"

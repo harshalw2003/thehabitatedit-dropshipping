@@ -14,6 +14,55 @@ dotenv.config();
 
 const router = express.Router();
 
+router.get("/get-user-details", authenticate.authenticateToken, async (req, res) => {
+
+  try{
+
+    // console.log("Fetching user details for:", req.user._id);
+    const user = await User.findById(req.user._id).select('-otp -__v -cart -wishlist');
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    console.log("User details fetched:", user);
+    res.status(200).json({ success: true, user: user });
+
+  }catch(error){
+    console.error("Error fetching user details:", error.message);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+})
+
+router.post("/update-user-details", authenticate.authenticateToken, async (req, res) => {
+
+  try{
+    console.log("Updating user details for:", req.user._id);
+    const { firstName, lastName, email } = req.body;
+    // console.log("Updating user details for:", req.user._id);
+    console.log("New details:", { firstName, lastName, email });
+
+
+    
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.email = email || user.email;
+    
+    await user.save();
+    
+    // console.log("Updated user details:", user);
+    res.status(200).json({ success: true, message: "User details updated", user: user });
+  } catch (error) {
+    console.error("Error updating user details:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+
 router.post("/update-cart-quantity", authenticate.authenticateToken, async (req, res) => {
   try {
     const { productId, variantId, quantity } = req.body;
@@ -49,6 +98,7 @@ router.post("/update-cart-quantity", authenticate.authenticateToken, async (req,
 });
 
 router.post("/remove-from-cart", authenticate.authenticateToken, async (req, res) => {
+
   try {
     const { productId, variantId } = req.body;
     // // console.log("Removing item from cart for user:", req.user._id);
@@ -109,6 +159,7 @@ router.post("/send-otp", async (req, res) => {
         const newUser = new User({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
+          email: req.body.email || "",
           phoneNumber: `+91${phoneNumber}`,
           otp: otp
         });
